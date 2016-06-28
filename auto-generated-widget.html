@@ -1669,11 +1669,16 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             // } else {
             //     cmd += evt.data.toUpperCase() + "0";
             // }
-            var cmd = "$3PM = 1\n$3PM = 0\nG01 F1000 Z-300\nG28.3 Z0";
-            cmd += "\n";
+            var cmd = "$3PM = 1\n"
             console.log(cmd);
             //chilipeppr.publish("/com-chilipeppr-widget-serialport/send", cmd);
             this.publishSend(cmd);
+            setTimeout(function() {
+                            var cmd="$3PM = 0\nG91 F3000 Z-300\nG28.3 Z0\n";
+                            console.log(cmd);
+                            //chilipeppr.publish("/com-chilipeppr-widget-serialport/send", cmd);
+                            this.publishSend(cmd);
+            },200);
 
         },
         isAAxisShowing: false,
