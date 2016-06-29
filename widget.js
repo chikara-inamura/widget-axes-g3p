@@ -1443,11 +1443,11 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                 var cmd="$1PM = 0\n";
                 otherthis.publishSend(cmd);
                     
-                    setTimeout(function() {
-                         var cmd="G91 F750 X-310\nG28.3 X0\nG90\n";
-                        console.log(cmd);
-                        otherthis.publishSend(cmd);
-                    }, 1200);
+                    // setTimeout(function() {
+                    //      var cmd="G91 F750 X-310\nG28.3 X0\nG90\n";
+                    //     console.log(cmd);
+                    //     otherthis.publishSend(cmd);
+                    // }, 1200);
                 
                 }
                 , 1200);
