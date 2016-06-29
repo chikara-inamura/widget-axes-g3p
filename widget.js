@@ -1444,13 +1444,13 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                 otherthis.publishSend(cmd);
                     
                     setTimeout(function() {
-                         var cmd="G91 F750 X-310\nG28.3 X0\nG90\n";
+                         var cmd="G91 G01 F750 X-310\nG28.3 X0\nG90\n";
                         console.log(cmd);
                         otherthis.publishSend(cmd);
-                    }, 1200);
+                    }, 500);
                 
                 }
-                , 1200);
+                , 500);
         }
         ,
         isAAxisShowing: false,
