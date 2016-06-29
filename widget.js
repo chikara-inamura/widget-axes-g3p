@@ -1440,10 +1440,13 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
 
             var otherthis = this;
             setTimeout(function() { 
-                var cmd="$1PM = 0\nG91 F750 X-310\nG28.3 X0\nG90\n";
-                console.log(cmd);
+                var cmd1="$1PM = 0\n";
+                var cmd2="G91 F750 X-310\nG28.3 X0\nG90\n";
+                console.log(cmd1);
+                console.log(cmd2);
                 //chilipeppr.publish("/com-chilipeppr-widget-serialport/send", cmd);
-                otherthis.publishSend(cmd);
+                otherthis.publishSend(cmd1);
+                otherthis.publishSend(cmd2);
                 }
                 , 1200);
         }
