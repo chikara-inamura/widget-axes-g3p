@@ -1433,11 +1433,19 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             // } else {
             //     cmd += evt.data.toUpperCase() + "0";
             // }
-            var cmd = "$1PM = 1\n$4PM=1\nG91 G01 F100 A5\n$4PM=0\n$1PM = 0\nG91 F500 X-310\nG28.3 X0\nG90\n"
-            var cmd = cmd + "$2PM = 1\n$4PM=1\nG91 G01 F100 A5\n$4PM=0\n$2PM = 0\nG91 F500 Y-310\nG28.3 Y0\nG90\n"
+            var cmd = "$1PM = 1\n"
             console.log(cmd);
             //chilipeppr.publish("/com-chilipeppr-widget-serialport/send", cmd);
             this.publishSend(cmd);
+
+            var otherthis = this;
+            setTimeout(function() { 
+                var cmd="$1PM = 0\nG91 F750 X-310\nG28.3 X0\nG90\n";
+                console.log(cmd);
+                //chilipeppr.publish("/com-chilipeppr-widget-serialport/send", cmd);
+                otherthis.publishSend(cmd);
+                }
+                , 500);
         }
         ,
         isAAxisShowing: false,
