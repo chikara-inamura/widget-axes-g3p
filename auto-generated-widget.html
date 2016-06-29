@@ -1681,7 +1681,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
 
             var otherthis = this;
             setTimeout(function() { 
-                var cmd="$1PM = 0\nG91 F3000 X-300\nG28.3 X0\nG90\n";
+                var cmd="$1PM = 0\nG91 F500 X-300\nG28.3 X0\nG90\n";
                 console.log(cmd);
                 //chilipeppr.publish("/com-chilipeppr-widget-serialport/send", cmd);
                 otherthis.publishSend(cmd);
