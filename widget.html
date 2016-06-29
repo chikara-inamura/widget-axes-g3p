@@ -86,24 +86,6 @@
                     </button>
                 </div>
                 <div class="btn-group">
-                    <button type="button" class="btn btn-xs btn-default showhideaaxis" data-delay="500" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="Show A Axis" data-content="View the A Axis in this widget.">
-                        <!-- <span class="glyphicon" style=""> -->
-                        <svg width="18px" height="18px" viewBox="0 0 15 15" style="margin-bottom:-5px;">
-                            <g transform="translate(0,-1)" id="layer1">
-                                <rect width="9.4103031" height="8.1495714" x="5.4276471" y="10.471354" transform="matrix(0.86602641,-0.49999826,0,1,0,0)" id="rect3833" style="fill:#f2f2f2;fill-opacity:1" />
-                                <path d="m 1.2047429,5.7539288 3.4930048,2.0050654 0,8.1495718 -3.4930048,-2.005124 z" id="rect3843" style="fill:#cccccc;fill-opacity:1" />
-                                <path d="M 1.2065082,5.751951 9.3485287,1.1046795 12.837494,3.111665 4.6954743,7.7589365 z" id="rect3845" style="fill:#e6e6e6;fill-opacity:1" />
-                                <g transform="matrix(0.72698276,-0.41972171,0,0.72698276,1.9959922,6.7024392)" id="text3847" style="font-size:12.23077774px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans">
-                                    <path d="m 5.3885789,13.508963 3.3622695,-8.7550395 1.2481604,0 3.5832352,8.7550395 -1.319825,0 -1.021222,-2.651595 -3.6608723,0 -0.9615015,2.651595 z m 2.5261812,-3.5951802 2.9681139,0 L 9.9691485,7.4891267 C 9.6904481,6.7525795 9.4834169,6.1474114 9.3480543,5.6736206 9.2365721,6.2350015 9.079308,6.7923932 8.8762616,7.3457973 z"
-                                    id="path3852" />
-                                </g>
-                                <g transform="matrix(1.1671134,0,0,1.1671134,-4.6139988,-2.1092078)" id="text3854" style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-                                /></g>
-                        </svg>
-                        <!-- </span> -->
-                    </button>
-                </div>
-                <div class="btn-group">
                     <button type="button" class="btn btn-xs btn-default view-small"><span class="glyphicon" style="font-size:8px;">S</span>
 
                     </button>
@@ -122,9 +104,6 @@
 
                         </button>
                         <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                            <li><a href="#" class="xyz-showa">Show/Hide A Axis</a>
-
-                            </li>
                             <!-- <li class="divider"></li>
                     <li role="presentation" class="dropdown-header fork-name"></li>
                     <li><a href="" target="_blank" id="com-chilipeppr-widget-xyz-tbar-standalone">View Widget Standalone</a></li>
@@ -299,7 +278,7 @@
                     </div>
                 </div>
                 <!-- A -->
-                <div id="com-chilipeppr-widget-xyz-a" class="row hidden">
+                <div id="com-chilipeppr-widget-xyz-a" class="row">
                     <!-- Label -->
                     <div class="col col-xs-3" style="position:relative;">
                         <div class="btn-group com-chilipeppr-xyz-menu">
@@ -638,6 +617,28 @@
                     </div>
                     <!-- end -->
                 </div>
+            </div>
+            <div class="">
+                 <button class="btn btn-xs btn-default resetclearpathAll" data-toggle="popover" data-placement="top" data-title="Reset all motors" data-content="Toggle Enable on all motors."
+                                data-html="true" data-delay="800" data-trigger="hover" data-container="body" style="background-color:#eef1ee">Reset All Motors</button>
+                               
+                <button type="button" class="btn btn-xs btn-default resetclearpathX" data-delay="500" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="Reset X & X' Motor" data-content="">
+                   X
+                </button>
+                <button type="button" class="btn btn-xs btn-default resetclearpathXp" data-delay="500" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="Reset X & X' Motor" data-content="">
+                   X'
+                </button>
+                <button type="button" class="btn btn-xs btn-default resetclearpathY" data-delay="500" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="Reset Y Motor" data-content="">
+                   Y
+                </button>
+                <button type="button" class="btn btn-xs btn-default resetclearpathZ" data-delay="500" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="Reset Z Motor" data-content="">
+                   Z
+                </button>
+                <button type="button" class="btn btn-xs btn-default resetclearpathA" data-delay="500" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="Reset A Motor" data-content="">
+                   A
+                </button>
+
+                
             </div>
             <div class="touchpad-overlay hidden" style="margin-top:4px;">
                 <canvas style="border:1px dashed silver;border-radius: 4px;"></canvas>

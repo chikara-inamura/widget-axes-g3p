@@ -246,6 +246,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             this.setupTouchArea();
             this.setupShowHideTouchBtn();
             this.setupShowHideWcsBtn();
+            this.setupClearPathResetBtns();
             var that = this;
             console.log(this.name + " done loading.");
         },
@@ -345,6 +346,10 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             $('#com-chilipeppr-widget-xyz-b .com-chilipeppr-xyz-dim').text("mm");
 
         },
+        setupClearPathResetBtns: function() {
+            resetclearpathY
+        }
+        ,
         setupShowHideWcsBtn: function () {
 
             var btnEl = $("#com-chilipeppr-widget-xyz .btnToggleShowWcs");
@@ -1428,16 +1433,19 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             // } else {
             //     cmd += evt.data.toUpperCase() + "0";
             // }
-            var cmd = "$3PM = 0\nG91 F3000 Z-300\nG28.3 Z0\n"
+            var cmd = "$3PM = 1\n"
             console.log(cmd);
             //chilipeppr.publish("/com-chilipeppr-widget-serialport/send", cmd);
             this.publishSend(cmd);
-        },
-        homeAxisSecondStep: function() {
-            var cmd="$3PM = 0\nG91 F3000 Z-300\nG28.3 Z0\n";
-            console.log(cmd);
-            //chilipeppr.publish("/com-chilipeppr-widget-serialport/send", cmd);
-            this.publishSend(cmd);
+
+            var otherthis = this;
+            setTimeout(function() { 
+                var cmd="$3PM = 0\nG91 F3000 Z-300\nG28.3 Z0\nG90\n";
+                console.log(cmd);
+                //chilipeppr.publish("/com-chilipeppr-widget-serialport/send", cmd);
+                otherthis.publishSend(cmd);
+                }
+                , 500);
         }
         ,
         isAAxisShowing: false,
@@ -1537,6 +1545,8 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             $('#com-chilipeppr-widget-xyz-ftr .joggotozerom').click("xyz", this.gotoZeroM.bind(this));
             $('#com-chilipeppr-widget-xyz-ftr .jogzerooutm').click("xyz", this.zeroOutAxisG28.bind(this));
 
+            $('#com-chilipeppr-widget-xyz-ftr .resetclearpathY').click("y", this.zeroOutAxisG28.bind(this));
+            
 
             // setup base value increment buttons
             $('#com-chilipeppr-widget-xyz-ftr .jogincr1').click({
