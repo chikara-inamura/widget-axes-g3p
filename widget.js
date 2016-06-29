@@ -1445,7 +1445,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                 //chilipeppr.publish("/com-chilipeppr-widget-serialport/send", cmd);
                 otherthis.publishSend(cmd);
                 }
-                , 500);
+                , 1200);
         }
         ,
         isAAxisShowing: false,
