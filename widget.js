@@ -1420,31 +1420,34 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
 
         },
         homeAxis: function (evt) {
+            var motNum=0;
+            var motChar='-';
+            if (evt.data == "x") {
+                motNum=1;
+                motChar="X";
+            } else if (evt.data == "y") {
+                motNum=2;
+                motChar="Y";
+            } else if (evt.data == "z") {
+                motNum=3;
+                motChar="Z";
+            }
             // Homes all axes present in command. At least one axis letter must be present. The value (number) must be provided but is ignored.
             // The homing sequence is fixed and always starts with the Z axis (if requested). The sequence runs ZXYA (but skipping all axes that are not specified in the G28.2 command)
             console.log("homeAxis. evt.data:", evt.data, "evt:", evt);
             
-            // var cmd = "G28.2 ";
-            // if (evt.data == "xyz") {
-            //     cmd += "X0 Y0 Z0";
-            //     if (this.isAAxisShowing) {
-            //         cmd += " A0";
-            //     }
-            // } else {
-            //     cmd += evt.data.toUpperCase() + "0";
-            // }
-            var cmd = "$1PM=1\n"
+            var cmd = "$"+motNum+"PM=1\n"
             console.log(cmd);
             //chilipeppr.publish("/com-chilipeppr-widget-serialport/send", cmd);
             this.publishSend(cmd);
 
             var otherthis = this;
             setTimeout(function() { 
-                var cmd="$1PM=0\n";
+                var cmd="$"+motNum+"PM=0\n";
                 otherthis.publishSend(cmd);
                     
                     setTimeout(function() {
-                         var cmd="G91 G01 F750 X-310\nG28.3 X0\nG90\n";
+                         var cmd="G91 G01 F750 "+motChar+"-310\nG28.3 "+motChar+"0\nG90\n";
                         console.log(cmd);
                         otherthis.publishSend(cmd);
                     }, 500);
@@ -1546,11 +1549,15 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             //gotoZero
             $('#com-chilipeppr-widget-xyz-ftr .joggotozerow').click("xyz", this.gotoZero.bind(this));
             $('#com-chilipeppr-widget-xyz-ftr .jogzerooutw').click("xyz", this.zeroOutAxisG10.bind(this));
-            $('#com-chilipeppr-widget-xyz-ftr .joghomem').click("xyz", this.homeAxis.bind(this));
+            $('#com-chilipeppr-widget-xyz-ftr .joghomem').click("x", this.homeAxis.bind(this));
             $('#com-chilipeppr-widget-xyz-ftr .joggotozerom').click("xyz", this.gotoZeroM.bind(this));
             $('#com-chilipeppr-widget-xyz-ftr .jogzerooutm').click("xyz", this.zeroOutAxisG28.bind(this));
 
-            $('#com-chilipeppr-widget-xyz-ftr .resetclearpathY').click("y", this.zeroOutAxisG28.bind(this));
+            $('#com-chilipeppr-widget-xyz-ftr .resetclearpathX').click("x", this.homeAxis.bind(this));
+            $('#com-chilipeppr-widget-xyz-ftr .resetclearpathXp').click("x", this.homeAxis.bind(this));
+            $('#com-chilipeppr-widget-xyz-ftr .resetclearpathY').click("y", this.homeAxis.bind(this));
+            $('#com-chilipeppr-widget-xyz-ftr .resetclearpathZ').click("z", this.homeAxis.bind(this));
+//            $('#com-chilipeppr-widget-xyz-ftr .resetclearpathA').??? <--- need to home using tinyG
             
 
             // setup base value increment buttons
