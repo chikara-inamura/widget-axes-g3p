@@ -1436,14 +1436,14 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             // The homing sequence is fixed and always starts with the Z axis (if requested). The sequence runs ZXYA (but skipping all axes that are not specified in the G28.2 command)
             console.log("homeAxis. evt.data:", evt.data, "evt:", evt);
             
-            var cmd = "$"+motNum+"PM=1\n"
+            var cmd = "$"+motNum+"PM=0\n"
             console.log(cmd);
             //chilipeppr.publish("/com-chilipeppr-widget-serialport/send", cmd);
             this.publishSend(cmd);
 
             var otherthis = this;
             setTimeout(function() { 
-                var cmd="$"+motNum+"PM=0\n";
+                var cmd="$"+motNum+"PM=1\n";
                 otherthis.publishSend(cmd);
                     
                     setTimeout(function() {
