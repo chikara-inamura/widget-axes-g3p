@@ -442,6 +442,8 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             // the specific implementation
             chilipeppr.subscribe("/com-chilipeppr-interface-cnccontroller/axes", this, this.updateAxesFromStatus);
 
+            chilipeppr.subscribe("/com-chilipeppr-widget-tinyg/com-chilipeppr-interface-cnccontroller/status", this, this.controllerStatus);
+
             // Update units if we get a notification published to us
             chilipeppr.subscribe("/com-chilipeppr-interface-cnccontroller/units", this, this.updateUnitsFromStatus);
             chilipeppr.subscribe('/com-chilipeppr-widget-3dviewer/unitsChanged', this, this.updateUnitsFromStatus);
@@ -1416,6 +1418,9 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                 mz: this.axismz,
                 ma: this.axisma
             };
+        },
+        controllerStatus: function (data) {
+          alert(data);  
         },
         updateAxesFromStatus: function (axes) {
             console.log("updateAxesFromStatus:", axes);
