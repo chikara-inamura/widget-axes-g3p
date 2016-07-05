@@ -1420,7 +1420,8 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             };
         },
         controllerStatus: function (data) {
-          alert(data);  
+          //alert(data);
+          $('#com-chilipeppr-widget-xyz-ma .machineStateReport').val(data);
         },
         updateAxesFromStatus: function (axes) {
             console.log("updateAxesFromStatus:", axes);
@@ -2903,6 +2904,9 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                 </button>
 
                 
+            </div>
+            <div class="">
+                Machine State: <div class="machineStateReport">UNKNOWN</div>
             </div>
             <div class="touchpad-overlay hidden" style="margin-top:4px;">
                 <canvas style="border:1px dashed silver;border-radius: 4px;"></canvas>
