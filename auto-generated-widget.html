@@ -442,7 +442,11 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             // the specific implementation
             chilipeppr.subscribe("/com-chilipeppr-interface-cnccontroller/axes", this, this.updateAxesFromStatus);
 
+            // Subscribe to controller status updates, used by homing mechanism to queue commands for axis-by-axis homing
             chilipeppr.subscribe("/com-chilipeppr-interface-cnccontroller/status", this, this.controllerStatus);
+            
+            chilipeppr.subscribe("/com-chilipeppr-widget-serialport/ws/recv", this, this.onWsRecvMotMonitor);
+
 
             // Update units if we get a notification published to us
             chilipeppr.subscribe("/com-chilipeppr-interface-cnccontroller/units", this, this.updateUnitsFromStatus);
@@ -1423,6 +1427,96 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
           console.log(data);
           $('#com-chilipeppr-widget-xyz .machineStateReport').text(data);
         },
+        onWsRecvMotMonitor: function(data) {
+            //debugger;
+            //console.log("data:", data);
+            // make sure we have a port defined
+            if ('port' in this.options && this.options.port != null && this.options.port != "empty") {
+                if (data.match(/^{/)) {
+                    // it is json
+                    var d = $.parseJSON(data);
+                    if ('P' in d && d.P == this.options.port && 'D' in d && d.D !== undefined) {
+                        // append data until we have a newline
+                        this.data += d.D;
+                        if (this.data.match(/\r{0,1}\n/)) {
+                            console.group("G3P - onWsRecvLaser");
+                            // we found our data, but may have had more than we need on one line
+                            // so remove it from buffer
+                            this.data = this.data.replace(/^(.*?)\r{0,1}\n/, "");
+                            var line = RegExp.$1;
+                            // process the line
+                            console.log("processing line:", line);
+                            // see if json, cuz could just be text response from Arduino
+                            if (line.match(/^{/)) {
+                                var tmp = $.parseJSON(line);
+                                
+                                alert(tmp);
+                                // if ('a' in tmp && 'o' in tmp) {
+                                //     console.log("a and o were in update a:", tmp.a, "o:", tmp.o);
+                                    
+                                //     // double check size and toss garbage
+                                //     if (tmp.o > 200 || tmp.a > 200) {
+                                //         // toss it
+                                //         console.log("got garbage data");
+                                //     } else {
+                                //         // good data
+                                //         this.statEl.a.text(tmp.a);
+                                //         this.statEl.o.text(tmp.o);
+                                //         var objTemp = parseFloat(tmp.o);
+                                //         if (objTemp > this.maxTemp) {
+                                //             // current obj temperature is higher than we've seen. record it.
+                                //             console.log("cur o tmp > prev max tmp");
+                                //             this.maxTemp = objTemp;
+                                //             this.onMaxTempUpdate();
+                                //             this.onTimeUpdate();
+                                //         }
+                                //     }
+                                // }
+                            }
+                            console.groupEnd();
+                        }
+                    }
+                }
+            }
+        },
+        
+        
+        setupPortList: function() {
+            // populate com-chilipeppr-widget-lasersolder-port
+            chilipeppr.subscribe("/com-chilipeppr-widget-serialport/list", this, this.getPortListCallback);
+            chilipeppr.publish("/com-chilipeppr-widget-serialport/getlist");
+            
+            // create onclick event
+            $('.com-chilipeppr-widget-xyz-motorport').change(this.onPortListClick.bind(this));
+        },
+        onPortListClick: function(evt) {
+            console.group("G3P - onPortListClick");
+            console.log("evt:", evt);
+            var port = $(".com-chilipeppr-widget-xyz-motorport option:selected" ).val();
+            console.log("port:", port);
+            this.options.port = port;
+            this.saveOptionsLocalStorage();
+            console.groupEnd();
+        },
+        getPortListCallback: function(data) {
+            console.group("G3P - getPortListCallback");
+            console.log("data:", data);
+            var portlist = $('.com-chilipeppr-widget-xyz-motorport');
+            portlist.empty();
+            portlist.append($("<option />").val("empty").text("(Open serial port then choose)"));
+            var that = this;
+            data.forEach(function(item, indx) {
+                console.log("looping. item:", item);
+                if (item.IsOpen) {
+                    // the port is open so use it as a potential contender
+                    var itemEl = $("<option />").val(item.Name).text(item.Friendly);
+                    if (item.Name == that.options.port) itemEl.attr('selected', true);
+                    portlist.append(itemEl);
+                }
+            });
+            console.groupEnd();
+        },
+
         updateAxesFromStatus: function (axes) {
             console.log("updateAxesFromStatus:", axes);
             if ('x' in axes && axes.x !== null) {
@@ -2905,9 +2999,27 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
 
                 
             </div>
-            <div class="">
-                Machine State: <div class="machineStateReport">----</div>
+            
+             <div class="row">
+                <div class="col col-xs-4">
+                    Machine State:
+                </div>
+                <div class="col col-xs-8">
+                    <div class="machineStateReport">----</div>
+                    
+                </div>
             </div>
+
+            <div class="row">
+                <div class="col col-xs-4">
+                    MotMonitor Port:
+                </div>
+                <div class="col col-xs-8">
+                    <select class="com-chilipeppr-widget-xyz-motorport" class="form-control"></select>
+                    
+                </div>
+            </div>
+
             <div class="touchpad-overlay hidden" style="margin-top:4px;">
                 <canvas style="border:1px dashed silver;border-radius: 4px;"></canvas>
             </div>
