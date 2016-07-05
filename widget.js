@@ -1180,6 +1180,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
         },
         controllerStatus: function (data) {
           //alert(data);
+          console.log(data);
           $('#com-chilipeppr-widget-xyz .machineStateReport').text(data);
         },
         updateAxesFromStatus: function (axes) {
