@@ -1191,10 +1191,10 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
         },
         onWsRecvMotMonitor: function(data) {
             //debugger;
-            alert(data);
             //console.log("data:", data);
             // make sure we have a port defined
             if ('port' in this.options && this.options.port != null && this.options.port != "empty") {
+                alert(data);
                 if (data.match(/^{/)) {
                     // it is json
                     var d = $.parseJSON(data);
