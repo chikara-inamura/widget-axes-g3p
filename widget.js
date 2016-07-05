@@ -1194,14 +1194,14 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             //console.log("data:", data);
             // make sure we have a port defined
             if ('port' in this.options && this.options.port != null && this.options.port != "empty") {
-                alert(data);
                 if (data.match(/^{/)) {
                     // it is json
                     var d = $.parseJSON(data);
                     if ('P' in d && d.P == this.options.port && 'D' in d && d.D !== undefined) {
                         // append data until we have a newline
-                        this.data += d.D;
-                        if (this.data.match(/\r{0,1}\n/)) {
+                        this.data = d.D;
+//                        this.data += d.D;
+//                        if (this.data.match(/\r{0,1}\n/)) {
                             console.group("G3P - onWsRecvMotorMonitor");
                             // we found our data, but may have had more than we need on one line
                             // so remove it from buffer
@@ -1308,7 +1308,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                                 // }
                             }
                             console.groupEnd();
-                        }
+                        //}
                     }
                 }
             }
