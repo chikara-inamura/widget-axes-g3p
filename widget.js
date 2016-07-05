@@ -1199,9 +1199,8 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                     var d = $.parseJSON(data);
                     if ('P' in d && d.P == this.options.port && 'D' in d && d.D !== undefined) {
                         // append data until we have a newline
-                        this.data = d.D;
-//                        this.data += d.D;
-//                        if (this.data.match(/\r{0,1}\n/)) {
+                        this.data += d.D;
+                        if (this.data.match(/\r{0,1}\n/)) {
                             console.group("G3P - onWsRecvMotorMonitor");
                             // we found our data, but may have had more than we need on one line
                             // so remove it from buffer
@@ -1283,7 +1282,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                                         $('#com-chilipeppr-widget-xyz-ftr .resetclearpathA').css('background-color', 'purple');
                                         break;
                                 }
-
+                                this.data="";
                                 
                                 // if ('a' in tmp && 'o' in tmp) {
                                 //     console.log("a and o were in update a:", tmp.a, "o:", tmp.o);
@@ -1308,7 +1307,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                                 // }
                             }
                             console.groupEnd();
-                        //}
+                        }
                     }
                 }
             }
