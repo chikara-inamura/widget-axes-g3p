@@ -1547,9 +1547,11 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             $('#com-chilipeppr-widget-xyz-ftr .jogx').click("X+", this.jogBtn.bind(this));
             $('#com-chilipeppr-widget-xyz-ftr .jogy').click("Y+", this.jogBtn.bind(this));
             $('#com-chilipeppr-widget-xyz-ftr .jogz').click("Z+", this.jogBtn.bind(this));
+            $('#com-chilipeppr-widget-xyz-ftr .joga').click("A+", this.jogBtn.bind(this));
             $('#com-chilipeppr-widget-xyz-ftr .jogxneg').click("X-", this.jogBtn.bind(this));
             $('#com-chilipeppr-widget-xyz-ftr .jogyneg').click("Y-", this.jogBtn.bind(this));
             $('#com-chilipeppr-widget-xyz-ftr .jogzneg').click("Z-", this.jogBtn.bind(this));
+            $('#com-chilipeppr-widget-xyz-ftr .joganeg').click("A-", this.jogBtn.bind(this));
 
             //gotoZero
             $('#com-chilipeppr-widget-xyz-ftr .joggotozerow').click("xyz", this.gotoZero.bind(this));
@@ -1964,6 +1966,14 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             } else if (key == "Z-") {
                 // page down. Z-
                 xyz = "Z";
+                val = -1 * baseval; //0.001;
+            } else if (key == "A+") {
+                // A+
+                xyz = "A";
+                val = baseval; //0.001;
+            } else if (key == "A-") {
+                // A-
+                xyz = "A";
                 val = -1 * baseval; //0.001;
             }
             val = val * mult;
