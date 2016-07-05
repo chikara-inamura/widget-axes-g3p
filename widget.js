@@ -1209,7 +1209,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                             // process the line
                             console.log("processing line:", line);
                             // see if json, cuz could just be text response from Arduino
-                            if (line.match(/^\[.....]/)) {
+                            if (null!= line && line.charAt(0)=="[") {
                                 console.log("line");
                                 
                                 switch (line.charAt(1)) {
