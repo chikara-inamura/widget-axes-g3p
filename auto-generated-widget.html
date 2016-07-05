@@ -1445,7 +1445,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                             console.group("G3P - onWsRecvMotorMonitor");
                             // we found our data, but may have had more than we need on one line
                             // so remove it from buffer
-                            console.log("Hi!");
+                            alert(data);
                             this.data = this.data.replace(/^(.*?)\r{0,1}\n/, "");
                             var line = RegExp.$1;
                             // process the line
