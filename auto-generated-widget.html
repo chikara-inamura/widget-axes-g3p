@@ -1559,6 +1559,8 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             // populate com-chilipeppr-widget-lasersolder-port
             chilipeppr.subscribe("/com-chilipeppr-widget-serialport/list", this, this.getPortListCallback);
             chilipeppr.publish("/com-chilipeppr-widget-serialport/getlist");
+
+            chilipeppr.subscribe("/com-chilipeppr-widget-serialport/onportopen", this, this.getPortListCallback);            
             
             // create onclick event
             $('.com-chilipeppr-widget-xyz-motorport').change(this.onPortListClick.bind(this));
