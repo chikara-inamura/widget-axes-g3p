@@ -1201,7 +1201,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                         // append data until we have a newline
                         this.data += d.D;
                         if (this.data.match(/\r{0,1}\n/)) {
-                            console.group("G3P - onWsRecvLaser");
+                            console.group("G3P - onWsRecvMotorMonitor");
                             // we found our data, but may have had more than we need on one line
                             // so remove it from buffer
                             this.data = this.data.replace(/^(.*?)\r{0,1}\n/, "");
@@ -1209,10 +1209,10 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                             // process the line
                             console.log("processing line:", line);
                             // see if json, cuz could just be text response from Arduino
-                            if (line.match(/^{/)) {
-                                var tmp = $.parseJSON(line);
+                            if (line.match(/^\[/)) {
+                                console.log("line");
+                                alert(line);
                                 
-                                alert(tmp);
                                 // if ('a' in tmp && 'o' in tmp) {
                                 //     console.log("a and o were in update a:", tmp.a, "o:", tmp.o);
                                     
