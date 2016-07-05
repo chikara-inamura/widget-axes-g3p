@@ -349,7 +349,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
 
         },
         setupClearPathResetBtns: function() {
-            resetclearpathY
+//            resetclearpathY
         }
         ,
         setupShowHideWcsBtn: function () {
@@ -1180,7 +1180,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
         },
         controllerStatus: function (data) {
           //alert(data);
-          $('#com-chilipeppr-widget-xyz-ma .machineStateReport').val(data);
+          $('#com-chilipeppr-widget-xyz .machineStateReport').text(data);
         },
         updateAxesFromStatus: function (axes) {
             console.log("updateAxesFromStatus:", axes);
