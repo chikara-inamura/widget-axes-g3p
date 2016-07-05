@@ -1257,7 +1257,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             var port = $(".com-chilipeppr-widget-xyz-motorport option:selected" ).val();
             console.log("port:", port);
             this.options.port = port;
-            this.saveOptionsLocalStorage();
+            //this.saveOptionsLocalStorage();
             console.groupEnd();
         },
         getPortListCallback: function(data) {
