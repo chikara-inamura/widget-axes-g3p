@@ -1450,9 +1450,80 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                             // process the line
                             console.log("processing line:", line);
                             // see if json, cuz could just be text response from Arduino
-                            if (line.match(/^\[/)) {
+                            if (line.match(/^\[.....]/)) {
                                 console.log("line");
-                                alert(line);
+                                
+                                switch (line.charAt(1)) {
+                                    case "1":
+                                        $('#com-chilipeppr-widget-xyz-ftr .resetclearpathX').css('background-color', 'green');
+                                        break;
+                                    case "0":
+                                        $('#com-chilipeppr-widget-xyz-ftr .resetclearpathX').css('background-color', 'yellow');
+                                        break;
+                                    case "*":
+                                        $('#com-chilipeppr-widget-xyz-ftr .resetclearpathX').css('background-color', 'red');
+                                        break;
+                                    default:
+                                        $('#com-chilipeppr-widget-xyz-ftr .resetclearpathX').css('background-color', 'purple');
+                                        break;
+                                }
+                                switch (line.charAt(2)) {
+                                    case "1":
+                                        $('#com-chilipeppr-widget-xyz-ftr .resetclearpathXp').css('background-color', 'green');
+                                        break;
+                                    case "0":
+                                        $('#com-chilipeppr-widget-xyz-ftr .resetclearpathXp').css('background-color', 'yellow');
+                                        break;
+                                    case "*":
+                                        $('#com-chilipeppr-widget-xyz-ftr .resetclearpathXp').css('background-color', 'red');
+                                        break;
+                                    default:
+                                        $('#com-chilipeppr-widget-xyz-ftr .resetclearpathXp').css('background-color', 'purple');
+                                        break;
+                                }
+                                switch (line.charAt(3)) {
+                                    case "1":
+                                        $('#com-chilipeppr-widget-xyz-ftr .resetclearpathY').css('background-color', 'green');
+                                        break;
+                                    case "0":
+                                        $('#com-chilipeppr-widget-xyz-ftr .resetclearpathY').css('background-color', 'yellow');
+                                        break;
+                                    case "*":
+                                        $('#com-chilipeppr-widget-xyz-ftr .resetclearpathY').css('background-color', 'red');
+                                        break;
+                                    default:
+                                        $('#com-chilipeppr-widget-xyz-ftr .resetclearpathY').css('background-color', 'purple');
+                                        break;
+                                }
+                                switch (line.charAt(4)) {
+                                    case "1":
+                                        $('#com-chilipeppr-widget-xyz-ftr .resetclearpathZ').css('background-color', 'green');
+                                        break;
+                                    case "0":
+                                        $('#com-chilipeppr-widget-xyz-ftr .resetclearpathZ').css('background-color', 'yellow');
+                                        break;
+                                    case "*":
+                                        $('#com-chilipeppr-widget-xyz-ftr .resetclearpathZ').css('background-color', 'red');
+                                        break;
+                                    default:
+                                        $('#com-chilipeppr-widget-xyz-ftr .resetclearpathZ').css('background-color', 'purple');
+                                        break;
+                                }
+                                switch (line.charAt(5)) {
+                                    case "1":
+                                        $('#com-chilipeppr-widget-xyz-ftr .resetclearpathA').css('background-color', 'green');
+                                        break;
+                                    case "0":
+                                        $('#com-chilipeppr-widget-xyz-ftr .resetclearpathA').css('background-color', 'yellow');
+                                        break;
+                                    case "*":
+                                        $('#com-chilipeppr-widget-xyz-ftr .resetclearpathA').css('background-color', 'red');
+                                        break;
+                                    default:
+                                        $('#com-chilipeppr-widget-xyz-ftr .resetclearpathA').css('background-color', 'purple');
+                                        break;
+                                }
+
                                 
                                 // if ('a' in tmp && 'o' in tmp) {
                                 //     console.log("a and o were in update a:", tmp.a, "o:", tmp.o);
