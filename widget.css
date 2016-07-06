@@ -219,3 +219,24 @@
     width:70%;
     z-index:10;
 }
+
+
+#com-chilipeppr-widget-xyz .clearpath_homed {
+    background-color: #008000;
+}
+
+#com-chilipeppr-widget-xyz .clearpath_enabled {
+    background-color: #FFFF99;
+}
+
+#com-chilipeppr-widget-xyz .clearpath_disabled {
+    background-color: #FF9966;
+}
+
+#com-chilipeppr-widget-xyz .clearpath_error {
+    background-color: #FF0000;
+}
+
+#com-chilipeppr-widget-xyz .clearpath_unknown {
+    background-color: #9900CC;
+}

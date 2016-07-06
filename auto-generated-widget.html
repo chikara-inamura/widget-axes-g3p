@@ -235,12 +235,34 @@
     width:70%;
     z-index:10;
 }
+
+
+#com-chilipeppr-widget-xyz .clearpath_homed {
+    background-color: #008000;
+}
+
+#com-chilipeppr-widget-xyz .clearpath_enabled {
+    background-color: #FFFF99;
+}
+
+#com-chilipeppr-widget-xyz .clearpath_disabled {
+    background-color: #FF9966;
+}
+
+#com-chilipeppr-widget-xyz .clearpath_error {
+    background-color: #FF0000;
+}
+
+#com-chilipeppr-widget-xyz .clearpath_unknown {
+    background-color: #9900CC;
+}
     </style>
 
     <script type='text/javascript'>
     //<![CDATA[
 // Test this element. This code is auto-removed by the chilipeppr.load()
 cprequire_test(["inline:com-chilipeppr-widget-xyz"], function (xyz) {
+
     console.log("test running of " + xyz.id);
     //sp.init("192.168.1.7");
     //xyz.initAs3dPrinting();
@@ -401,6 +423,14 @@ cprequire_test(["inline:com-chilipeppr-widget-xyz"], function (xyz) {
     $('body').css("padding", "20px");
 
 } /*end_test*/ );
+
+var motorStateEnum = { 
+            homed: "clearpath_homed",
+            enabled: "clearpath_enabled",
+            disabled: "clearpath_disabled",
+            error: "clearpath_error",
+            unknown: "clearpath_unknown"
+        };
 
 cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"], function () {
     return {
@@ -1235,8 +1265,8 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                 console.log("just evaled options: ", options);
             } else {
                 options = {
-                    showA: false,
-                    moveBy: 0.01
+                    showA: true,
+                    moveBy: 1
                 };
             }
             this.options = options;
@@ -1430,6 +1460,13 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
           console.log(data);
           $('#com-chilipeppr-widget-xyz .machineStateReport').text(data);
         },
+        motMonitorWatchdog: {},
+        motors: { 'X' : motorStateEnum.unknown,
+                   'Xp' : motorStateEnum.unknown,
+                   'Y' : motorStateEnum.unknown,
+                   'Z' : motorStateEnum.unknown,
+                   'A' : motorStateEnum.unknown
+        },
         onWsRecvMotMonitor: function(data) {
             //debugger;
             //console.log("data:", data);
@@ -1442,7 +1479,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                         // append data until we have a newline
                         this.data += d.D;
                         if (this.data.match(/\r{0,1}\n/)) {
-                            console.group("G3P - onWsRecvMotorMonitor");
+                            //console.group("G3P - onWsRecvMotorMonitor");
                             // we found our data, but may have had more than we need on one line
                             // so remove it from buffer
                             this.data = this.data.replace(/^(.*?)\r{0,1}\n/, "");
@@ -1451,78 +1488,53 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                             console.log("processing line:", line);
                             // see if json, cuz could just be text response from Arduino
                             if (null!= line && line.charAt(0)=="[") {
-                                console.log("line");
+                                //console.log("line");
                                 
-                                switch (line.charAt(1)) {
-                                    case "1":
-                                        $('#com-chilipeppr-widget-xyz-ftr .resetclearpathX').css('background-color', 'green');
-                                        break;
-                                    case "0":
-                                        $('#com-chilipeppr-widget-xyz-ftr .resetclearpathX').css('background-color', 'yellow');
-                                        break;
-                                    case "*":
-                                        $('#com-chilipeppr-widget-xyz-ftr .resetclearpathX').css('background-color', 'red');
-                                        break;
-                                    default:
-                                        $('#com-chilipeppr-widget-xyz-ftr .resetclearpathX').css('background-color', 'purple');
-                                        break;
+                                for (var i = 1; i<=5; i++) {
+                                    var motId = ['X','Xp','Y','Z','A'][i-1];
+                                    var indicatorIdStr = '#com-chilipeppr-widget-xyz-ftr .resetclearpath' + motId ;
+                                    var state = line.charAt(1);
+
+                                    switch (state) {
+                                        case "1":
+                                            if (this.motors[motId]!==this.motorStateEnum.homed) {
+                                                    this.motors[motId]=this.motorStateEnum.enabled;
+                                                    $(indicatorIdStr).toggleClass("clearpath_homed",false);
+                                                    $(indicatorIdStr).toggleClass("clearpath_enabled",true);
+                                                    $(indicatorIdStr).toggleClass("clearpath_disabed",false);
+                                                    $(indicatorIdStr).toggleClass("clearpath_error",false);
+                                                    $(indicatorIdStr).toggleClass("clearpath_unknown",false);
+                                                 }
+                                            break;
+                                        case "0":
+                                                this.motors[motId]=this.motorStateEnum.disabled;
+                                                $(indicatorIdStr).toggleClass("clearpath_homed",false);
+                                                $(indicatorIdStr).toggleClass("clearpath_enabled",false);
+                                                $(indicatorIdStr).toggleClass("clearpath_disabed",true);
+                                                $(indicatorIdStr).toggleClass("clearpath_error",false);
+                                                $(indicatorIdStr).toggleClass("clearpath_unknown",false);
+                                            break;
+                                        case "*":
+                                                this.motors[motId]=this.motorStateEnum.error;
+                                                $(indicatorIdStr).toggleClass("clearpath_homed",false);
+                                                $(indicatorIdStr).toggleClass("clearpath_enabled",false);
+                                                $(indicatorIdStr).toggleClass("clearpath_disabed",false);
+                                                $(indicatorIdStr).toggleClass("clearpath_error",true);
+                                                $(indicatorIdStr).toggleClass("clearpath_unknown",false);
+                                            break;
+                                        default:
+                                                this.motors[motId]=this.motorStateEnum.unknown;
+                                                $(indicatorIdStr).toggleClass("clearpath_homed",false);
+                                                $(indicatorIdStr).toggleClass("clearpath_enabled",false);
+                                                $(indicatorIdStr).toggleClass("clearpath_disabed",false);
+                                                $(indicatorIdStr).toggleClass("clearpath_error",false);
+                                                $(indicatorIdStr).toggleClass("clearpath_unknown",true);
+                                            break;
+                                    }
+                                    
                                 }
-                                switch (line.charAt(2)) {
-                                    case "1":
-                                        $('#com-chilipeppr-widget-xyz-ftr .resetclearpathXp').css('background-color', 'green');
-                                        break;
-                                    case "0":
-                                        $('#com-chilipeppr-widget-xyz-ftr .resetclearpathXp').css('background-color', 'yellow');
-                                        break;
-                                    case "*":
-                                        $('#com-chilipeppr-widget-xyz-ftr .resetclearpathXp').css('background-color', 'red');
-                                        break;
-                                    default:
-                                        $('#com-chilipeppr-widget-xyz-ftr .resetclearpathXp').css('background-color', 'purple');
-                                        break;
-                                }
-                                switch (line.charAt(3)) {
-                                    case "1":
-                                        $('#com-chilipeppr-widget-xyz-ftr .resetclearpathY').css('background-color', 'green');
-                                        break;
-                                    case "0":
-                                        $('#com-chilipeppr-widget-xyz-ftr .resetclearpathY').css('background-color', 'yellow');
-                                        break;
-                                    case "*":
-                                        $('#com-chilipeppr-widget-xyz-ftr .resetclearpathY').css('background-color', 'red');
-                                        break;
-                                    default:
-                                        $('#com-chilipeppr-widget-xyz-ftr .resetclearpathY').css('background-color', 'purple');
-                                        break;
-                                }
-                                switch (line.charAt(4)) {
-                                    case "1":
-                                        $('#com-chilipeppr-widget-xyz-ftr .resetclearpathZ').css('background-color', 'green');
-                                        break;
-                                    case "0":
-                                        $('#com-chilipeppr-widget-xyz-ftr .resetclearpathZ').css('background-color', 'yellow');
-                                        break;
-                                    case "*":
-                                        $('#com-chilipeppr-widget-xyz-ftr .resetclearpathZ').css('background-color', 'red');
-                                        break;
-                                    default:
-                                        $('#com-chilipeppr-widget-xyz-ftr .resetclearpathZ').css('background-color', 'purple');
-                                        break;
-                                }
-                                switch (line.charAt(5)) {
-                                    case "1":
-                                        $('#com-chilipeppr-widget-xyz-ftr .resetclearpathA').css('background-color', 'green');
-                                        break;
-                                    case "0":
-                                        $('#com-chilipeppr-widget-xyz-ftr .resetclearpathA').css('background-color', 'yellow');
-                                        break;
-                                    case "*":
-                                        $('#com-chilipeppr-widget-xyz-ftr .resetclearpathA').css('background-color', 'red');
-                                        break;
-                                    default:
-                                        $('#com-chilipeppr-widget-xyz-ftr .resetclearpathA').css('background-color', 'purple');
-                                        break;
-                                }
+                                
+                                //clear data buffer
                                 this.data="";
                                 
                                 // if ('a' in tmp && 'o' in tmp) {
@@ -1571,7 +1583,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             var port = $(".com-chilipeppr-widget-xyz-motorport option:selected" ).val();
             console.log("port:", port);
             this.options.port = port;
-            //this.saveOptionsLocalStorage();
+            this.saveOptionsCookie();
             console.groupEnd();
         },
         getPortListCallback: function(data) {
@@ -3057,19 +3069,19 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             </div>
             <div class="">
                 Home Axis / Motor Status: 
-                <button type="button" class="btn btn-xs btn-default resetclearpathX" data-delay="500" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="Reset X & X' Motor" data-content="">
+                <button type="button" class="btn btn-default resetclearpathX clearpath_unknown" data-delay="500" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="Reset X & X' Motor" data-content="">
                    X
                 </button>
-                <button type="button" class="btn btn-xs btn-default resetclearpathXp" data-delay="500" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="Reset X & X' Motor" data-content="">
+                <button type="button" class="btn btn-default resetclearpathXp clearpath_unknown" data-delay="500" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="Reset X & X' Motor" data-content="">
                    X'
                 </button>
-                <button type="button" class="btn btn-xs btn-default resetclearpathY" data-delay="500" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="Reset Y Motor" data-content="">
+                <button type="button" class="btn btn-default resetclearpathY clearpath_unknown" data-delay="500" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="Reset Y Motor" data-content="">
                    Y
                 </button>
-                <button type="button" class="btn btn-xs btn-default resetclearpathZ" data-delay="500" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="Reset Z Motor" data-content="">
+                <button type="button" class="btn btn-default resetclearpathZ clearpath_unknown" data-delay="500" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="Reset Z Motor" data-content="">
                    Z
                 </button>
-                <button type="button" class="btn btn-xs btn-default resetclearpathA" data-delay="500" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="Reset A Motor" data-content="">
+                <button type="button" class="btn btn-default resetclearpathA clearpath_unknown" data-delay="500" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="Reset A Motor" data-content="">
                    A
                 </button>
 
