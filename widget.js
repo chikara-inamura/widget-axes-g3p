@@ -1235,8 +1235,8 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
 
                                     switch (state) {
                                         case "1":
-                                            if (this.motors[motId]!==this.motorStateEnum.homed) {
-                                                    this.motors[motId]=this.motorStateEnum.enabled;
+                                            if (this.motors[motId]!==motorStateEnum.homed) {
+                                                    this.motors[motId]=motorStateEnum.enabled;
                                                     $(indicatorIdStr).toggleClass("clearpath_homed",false);
                                                     $(indicatorIdStr).toggleClass("clearpath_enabled",true);
                                                     $(indicatorIdStr).toggleClass("clearpath_disabed",false);
@@ -1245,7 +1245,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                                                  }
                                             break;
                                         case "0":
-                                                this.motors[motId]=this.motorStateEnum.disabled;
+                                                this.motors[motId]=motorStateEnum.disabled;
                                                 $(indicatorIdStr).toggleClass("clearpath_homed",false);
                                                 $(indicatorIdStr).toggleClass("clearpath_enabled",false);
                                                 $(indicatorIdStr).toggleClass("clearpath_disabed",true);
@@ -1253,7 +1253,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                                                 $(indicatorIdStr).toggleClass("clearpath_unknown",false);
                                             break;
                                         case "*":
-                                                this.motors[motId]=this.motorStateEnum.error;
+                                                this.motors[motId]=motorStateEnum.error;
                                                 $(indicatorIdStr).toggleClass("clearpath_homed",false);
                                                 $(indicatorIdStr).toggleClass("clearpath_enabled",false);
                                                 $(indicatorIdStr).toggleClass("clearpath_disabed",false);
@@ -1261,7 +1261,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                                                 $(indicatorIdStr).toggleClass("clearpath_unknown",false);
                                             break;
                                         default:
-                                                this.motors[motId]=this.motorStateEnum.unknown;
+                                                this.motors[motId]=motorStateEnum.unknown;
                                                 $(indicatorIdStr).toggleClass("clearpath_homed",false);
                                                 $(indicatorIdStr).toggleClass("clearpath_enabled",false);
                                                 $(indicatorIdStr).toggleClass("clearpath_disabed",false);
