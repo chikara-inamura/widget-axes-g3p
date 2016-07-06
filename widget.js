@@ -1231,7 +1231,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                                 for (var i = 1; i<=5; i++) {
                                     var motId = ['X','Xp','Y','Z','A'][i-1];
                                     var indicatorIdStr = '#com-chilipeppr-widget-xyz-ftr .resetclearpath' + motId ;
-                                    var state = line.charAt(1);
+                                    var state = line.charAt(i);
 
                                     switch (state) {
                                         case "1":
