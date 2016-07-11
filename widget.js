@@ -176,7 +176,7 @@ function ClearPathMotor(motId) {
                 case motorStateEnum.error:
                 case motorStateEnum.homed:
                     this.state = newState;
-                    updatedState = true;
+                    updatedState = true; 
                     break;
                 case motorStateEnum.enabled:
                     //enabled should not 'downgrade' a 'homed' state

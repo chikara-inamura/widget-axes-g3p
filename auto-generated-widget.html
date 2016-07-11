@@ -438,7 +438,7 @@ function ClearPathMotor(motId) {
                 case motorStateEnum.error:
                 case motorStateEnum.homed:
                     this.state = newState;
-                    updatedState = true;
+                    updatedState = true; 
                     break;
                 case motorStateEnum.enabled:
                     //enabled should not 'downgrade' a 'homed' state
@@ -2595,7 +2595,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                         </ul>
                     </div>
                 </div>
-            </div> <span class="panel-title" data-toggle="popover">G3P Axes <small>v0.0.8d</small></span>
+            </div> <span class="panel-title" data-toggle="popover">G3P Axes <small>v0.0.9</small></span>
 
         </div>
         <div id="com-chilipeppr-widget-xyz-body" class="panel-body">
