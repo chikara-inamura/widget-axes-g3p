@@ -169,7 +169,7 @@ function ClearPathMotor(motId) {
     this.processStateInfo = function(newState) {
         
         var updatedState = false;
-        if (state!==newState) {
+        if (this.state!==newState) {
             switch (newState) {
                 case motorStateEnum.unknown:
                 case motorStateEnum.disabled:
