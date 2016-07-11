@@ -1537,10 +1537,10 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                             if (null!= line && line.charAt(0)=="[") {
                                 //console.log("line");
                                 
-                                for (var i = 0; i<motorIdArr.length; i++) {
+                                for (var i = 0; i<this.motorIdArr.length; i++) {
                                     this.motorWatchdogTime = Date.now(); 
                                     
-                                    var motId = motorIdArr[i];
+                                    var motId = this.motorIdArr[i];
                                     var motor = motors[motId];
                                     
                                     var state = line.charAt(i+1);
