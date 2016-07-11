@@ -166,7 +166,7 @@ function ClearPathMotor(motId) {
     this.motId = motId;
     this.state = motorStateEnum.unknown;
     
-    function processStateInfo(newState) {
+    this.processStateInfo = function(newState) {
         
         var updatedState = false;
         if (state!==newState) {
@@ -195,7 +195,7 @@ function ClearPathMotor(motId) {
         } 
     }
     
-    function refreshDisplay() {
+    this.refreshDisplay = function() {
         var indicatorIdStr = '#com-chilipeppr-widget-xyz-ftr .resetclearpath' + this.motId;
         for (stateOption in motorStateEnum) {
               $(indicatorIdStr).toggleClass(stateOption,stateOption==this.state);

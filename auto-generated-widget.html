@@ -428,7 +428,7 @@ function ClearPathMotor(motId) {
     this.motId = motId;
     this.state = motorStateEnum.unknown;
     
-    function processStateInfo(newState) {
+    this.processStateInfo = function(newState) {
         
         var updatedState = false;
         if (state!==newState) {
@@ -457,7 +457,7 @@ function ClearPathMotor(motId) {
         } 
     }
     
-    function refreshDisplay() {
+    this.refreshDisplay = function() {
         var indicatorIdStr = '#com-chilipeppr-widget-xyz-ftr .resetclearpath' + this.motId;
         for (stateOption in motorStateEnum) {
               $(indicatorIdStr).toggleClass(stateOption,stateOption==this.state);
@@ -2595,7 +2595,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                         </ul>
                     </div>
                 </div>
-            </div> <span class="panel-title" data-toggle="popover">G3P Axes <small>v0.0.8a</small></span>
+            </div> <span class="panel-title" data-toggle="popover">G3P Axes <small>v0.0.8b</small></span>
 
         </div>
         <div id="com-chilipeppr-widget-xyz-body" class="panel-body">
