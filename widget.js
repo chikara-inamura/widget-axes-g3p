@@ -190,7 +190,7 @@ function ClearPathMotor(motId) {
             }
         }
         
-        if (updatedSate) {
+        if (updatedState) {
             this.refreshDisplay();
         } 
     }
