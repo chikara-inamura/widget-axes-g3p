@@ -1013,7 +1013,8 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             console.log("options:", options);
             
             //setup port
-            if (null != options.port && options.port in $(".com-chilipeppr-widget-xyz-motorport option")) {
+            var portoptions = $(".com-chilipeppr-widget-xyz-motorport option");
+            if (null!=options && null != options.port && null!=portoptions && options.port in portoptions) {
                 console.error("FOUND MOTORPORT! Was looking for:"+options.port);
             } else {
                 console.error("CANNOT FIND MOTORPORT! Was looking for:"+options.port);
