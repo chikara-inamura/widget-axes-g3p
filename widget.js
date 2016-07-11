@@ -1014,9 +1014,9 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             
             //setup port
             if (null != options.port && options.port in $(".com-chilipeppr-widget-xyz-motorport option")) {
-                console.error("FOUND MOTORPORT!");
+                console.error("FOUND MOTORPORT! Was looking for:"+options.port);
             } else {
-                console.error("CANNOT FIND MOTORPORT!");
+                console.error("CANNOT FIND MOTORPORT! Was looking for:"+options.port);
             }
 
             // hilite the correct button
