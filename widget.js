@@ -255,6 +255,9 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
 
             // setup controller specific init items
             //this.initControllerSpecific();
+            
+            //setup serial port list
+            this.setupPortList();
 
             // setup cookie based UI settings
             this.setupUiFromCookie();
@@ -263,7 +266,6 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             this.setupShowHideWcsBtn();
             this.setupClearPathResetBtns();
             
-            this.setupPortList();
             
             var that = this;
             console.log(this.name + " done loading.");
