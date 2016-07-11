@@ -162,6 +162,48 @@ cprequire_test(["inline:com-chilipeppr-widget-xyz"], function (xyz) {
 
 } /*end_test*/ );
 
+function ClearPathMotor(motId) {
+    this.motId = motId;
+    this.state = motorStateEnum.unknown;
+    
+    function processStateInfo(newState) {
+        
+        var updatedState = false;
+        if (state!==newState) {
+            switch (newState) {
+                case motorStateEnum.unknown:
+                case motorStateEnum.disabled:
+                case motorStateEnum.error:
+                case motorStateEnum.homed:
+                    this.state = newState;
+                    updatedState = true;
+                    break;
+                case motorStateEnum.enabled:
+                    //enabled should not 'downgrade' a 'homed' state
+                    if (motorStateEnum.homed!==this.state) {
+                        this.state = newState;
+                        updatedState = true;
+                    } 
+                    break;
+                default:
+                    console.error("UNEXPECTED MOTOR STATE");
+            }
+        }
+        
+        if (updatedSate) {
+            this.refreshDisplay();
+        } 
+    }
+    
+    function refreshDisplay() {
+        var indicatorIdStr = '#com-chilipeppr-widget-xyz-ftr .resetclearpath' + this.motId;
+        for (stateOption in motorStateEnum) {
+              $(indicatorIdStr).toggleClass(stateOption,stateOption==this.state);
+        }
+    }
+    
+}
+
 var motorStateEnum = { 
             homed: "clearpath_homed",
             enabled: "clearpath_enabled",
@@ -169,6 +211,8 @@ var motorStateEnum = {
             error: "clearpath_error",
             unknown: "clearpath_unknown"
         };
+        
+        
 
 cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"], function () {
     return {
@@ -1199,12 +1243,14 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
           console.log(data);
           $('#com-chilipeppr-widget-xyz .machineStateReport').text(data);
         },
-        motMonitorWatchdog: {},
-        motors: { 'X' : motorStateEnum.unknown,
-                   'Xp' : motorStateEnum.unknown,
-                   'Y' : motorStateEnum.unknown,
-                   'Z' : motorStateEnum.unknown,
-                   'A' : motorStateEnum.unknown
+        motorIdArr: ['X','Xp','Y','Z','A','S'], //order must match that in the arduino code for reporting
+        //TODO dynamically initialize motors, to assure keys are in motorIdArr
+        motors: { 'X' : new ClearPathMotor('X'),
+                  'Xp' : new ClearPathMotor('Xp'),
+                  'Y' : new ClearPathMotor('Y'),
+                  'Z' : new ClearPathMotor('Z'),
+                  'A' : new ClearPathMotor('A'),
+                  'S' : new ClearPathMotor('S')
         },
         onWsRecvMotMonitor: function(data) {
             //debugger;
@@ -1229,48 +1275,29 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                             if (null!= line && line.charAt(0)=="[") {
                                 //console.log("line");
                                 
-                                for (var i = 1; i<=5; i++) {
-                                    var motId = ['X','Xp','Y','Z','A'][i-1];
-                                    var indicatorIdStr = '#com-chilipeppr-widget-xyz-ftr .resetclearpath' + motId ;
-                                    var state = line.charAt(i);
+                                for (var i = 0; i<motorIdArr.length; i++) {
+                                    this.motorWatchdogTime = Date.now(); 
+                                    
+                                    var motId = motorIdArr[i];
+                                    var motor = motors[motId];
+                                    
+                                    var state = line.charAt(i+1);
 
                                     switch (state) {
                                         case "1":
-                                            if (this.motors[motId]!==motorStateEnum.homed) {
-                                                    this.motors[motId]=motorStateEnum.enabled;
-                                                    $(indicatorIdStr).toggleClass("clearpath_homed",false);
-                                                    $(indicatorIdStr).toggleClass("clearpath_enabled",true);
-                                                    $(indicatorIdStr).toggleClass("clearpath_disabled",false);
-                                                    $(indicatorIdStr).toggleClass("clearpath_error",false);
-                                                    $(indicatorIdStr).toggleClass("clearpath_unknown",false);
-                                                 }
+                                            motor.processStateInfo(motorStateEnum.enabled);
                                             break;
                                         case "0":
-                                                this.motors[motId]=motorStateEnum.disabled;
-                                                $(indicatorIdStr).toggleClass("clearpath_homed",false);
-                                                $(indicatorIdStr).toggleClass("clearpath_enabled",false);
-                                                $(indicatorIdStr).toggleClass("clearpath_disabled",true);
-                                                $(indicatorIdStr).toggleClass("clearpath_error",false);
-                                                $(indicatorIdStr).toggleClass("clearpath_unknown",false);
+                                            motor.processStateInfo(motorStateEnum.disabled);
                                             break;
                                         case "*":
-                                                this.motors[motId]=motorStateEnum.error;
-                                                $(indicatorIdStr).toggleClass("clearpath_homed",false);
-                                                $(indicatorIdStr).toggleClass("clearpath_enabled",false);
-                                                $(indicatorIdStr).toggleClass("clearpath_disabled",false);
-                                                $(indicatorIdStr).toggleClass("clearpath_error",true);
-                                                $(indicatorIdStr).toggleClass("clearpath_unknown",false);
+                                            motor.processStateInfo(motorStateEnum.error);
                                             break;
                                         default:
-                                                this.motors[motId]=motorStateEnum.unknown;
-                                                $(indicatorIdStr).toggleClass("clearpath_homed",false);
-                                                $(indicatorIdStr).toggleClass("clearpath_enabled",false);
-                                                $(indicatorIdStr).toggleClass("clearpath_disabled",false);
-                                                $(indicatorIdStr).toggleClass("clearpath_error",false);
-                                                $(indicatorIdStr).toggleClass("clearpath_unknown",true);
+                                            motor.processStateInfo(motorStateEnum.unknown);
                                             break;
-                                    }
-                                    
+                                    }    
+
                                 }
                                 
                                 //clear data buffer
@@ -1306,8 +1333,13 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
         },
         watchdogset: false,
         watchdogTick: function() {
-            console.error("WATCHDOG");
+            if ((this.motorWatchdogTime - Date.now()) > 2750) { //2750 value is from the arduino setting of minimum update interval (2500), with some margin added for processing 
+                for (motorId in this.motorIdArr) {
+                    motors[motorId].processStateInfo(motorStateEnum.unknown);
+                }
+            }
         },
+        motorWatchdogTime: 0,
         setupWatchdog: function() {
             if (!this.watchdogset) {
                 this.watchdogset = true;
