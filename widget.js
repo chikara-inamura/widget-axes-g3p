@@ -256,8 +256,6 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             // setup controller specific init items
             //this.initControllerSpecific();
             
-            //setup serial port list
-            this.setupPortList();
 
             // setup cookie based UI settings
             this.setupUiFromCookie();
@@ -265,6 +263,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             this.setupShowHideTouchBtn();
             this.setupShowHideWcsBtn();
             this.setupClearPathResetBtns();
+            this.setupPortList();
             
             
             var that = this;
@@ -1011,14 +1010,6 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             }
             this.options = options;
             console.log("options:", options);
-            
-            //setup port
-            var portoptions = $(".com-chilipeppr-widget-xyz-motorport option");
-            if (null!=options && null != options.port && null!=portoptions && options.port in portoptions) {
-                console.error("FOUND MOTORPORT! Was looking for:"+options.port);
-            } else {
-                console.error("CANNOT FIND MOTORPORT! Was looking for:"+options.port);
-            }
 
             // hilite the correct button
             var cls = ".jogincr1";
