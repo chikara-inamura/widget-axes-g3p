@@ -1573,7 +1573,8 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
         setupWatchdog: function() {
             if (!this.watchdogset) {
                 this.watchdogset = true;
-                setInterval(function() {this.watchdogTick();},250);
+                var that = this;
+                setInterval(function() {that.watchdogTick();},250);
             }
         },
         setupPortList: function() {
@@ -2562,7 +2563,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                         </ul>
                     </div>
                 </div>
-            </div> <span class="panel-title" data-toggle="popover">G3P Axes <small>v0.0.4</small></span>
+            </div> <span class="panel-title" data-toggle="popover">G3P Axes <small>v0.0.5</small></span>
 
         </div>
         <div id="com-chilipeppr-widget-xyz-body" class="panel-body">
