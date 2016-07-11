@@ -264,7 +264,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             this.setupShowHideWcsBtn();
             this.setupClearPathResetBtns();
             this.setupPortList();
-            
+            this.setupWatchdog();
             
             var that = this;
             console.log(this.name + " done loading.");
@@ -1304,8 +1304,16 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                 }
             }
         },
-        
-        
+        watchdogset: false,
+        watchdogTick: function() {
+            console.error("WATCHDOG");
+        },
+        setupWatchdog: function() {
+            if (!this.watchdogset) {
+                this.watchdogset = true;
+                setInterval(function() {that.watchdogTick();},250);
+            }
+        },
         setupPortList: function() {
             chilipeppr.subscribe("/com-chilipeppr-widget-serialport/list", this, this.getPortListCallback);
             chilipeppr.publish("/com-chilipeppr-widget-serialport/getlist");
