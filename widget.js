@@ -1009,6 +1009,13 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             }
             this.options = options;
             console.log("options:", options);
+            
+            //setup port
+            if (null != options.port && options.port in $(".com-chilipeppr-widget-xyz-motorport option")) {
+                console.error("FOUND MOTORPORT!");
+            } else {
+                console.error("CANNOT FIND MOTORPORT!");
+            }
 
             // hilite the correct button
             var cls = ".jogincr1";
@@ -1306,7 +1313,6 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
         
         
         setupPortList: function() {
-            // populate com-chilipeppr-widget-lasersolder-port
             chilipeppr.subscribe("/com-chilipeppr-widget-serialport/list", this, this.getPortListCallback);
             chilipeppr.publish("/com-chilipeppr-widget-serialport/getlist");
 
