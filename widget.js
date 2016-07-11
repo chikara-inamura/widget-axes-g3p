@@ -1311,7 +1311,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
         setupWatchdog: function() {
             if (!this.watchdogset) {
                 this.watchdogset = true;
-                setInterval(function() {that.watchdogTick();},250);
+                setInterval(function() {this.watchdogTick();},250);
             }
         },
         setupPortList: function() {
