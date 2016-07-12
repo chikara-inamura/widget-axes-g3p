@@ -198,7 +198,7 @@ function ClearPathMotor(motId) {
     this.refreshDisplay = function() {
         var indicatorIdStr = '#com-chilipeppr-widget-xyz-ftr .resetclearpath' + this.motId;
         for (stateOption in motorStateEnum) {
-              $(indicatorIdStr).toggleClass(motorStateEnum[stateOption],stateOption==this.state);
+              $(indicatorIdStr).toggleClass(motorStateEnum[stateOption],motorStateEnum[stateOption]==this.state);
         }
     }
     
