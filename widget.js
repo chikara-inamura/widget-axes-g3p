@@ -1354,15 +1354,17 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             portlist.empty();
             portlist.append($("<option />").val("empty").text("(Open serial port then choose)"));
             var that = this;
-            data.forEach(function(item, indx) {
-                console.log("looping. item:", item);
-                if (item.IsOpen) {
-                    // the port is open so use it as a potential contender
-                    var itemEl = $("<option />").val(item.Name).text(item.Friendly);
-                    if (item.Name == that.options.port) itemEl.attr('selected', true);
-                    portlist.append(itemEl);
-                }
-            });
+            if (null!=data) {
+                data.forEach(function(item, indx) {
+                    console.log("looping. item:", item);
+                    if (item.IsOpen) {
+                        // the port is open so use it as a potential contender
+                        var itemEl = $("<option />").val(item.Name).text(item.Friendly);
+                        if (item.Name == that.options.port) itemEl.attr('selected', true);
+                        portlist.append(itemEl);
+                    }
+                });
+            }
             console.groupEnd();
         },
 
