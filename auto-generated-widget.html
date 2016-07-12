@@ -1536,10 +1536,8 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                             // see if json, cuz could just be text response from Arduino
                             if (null!= line && line.charAt(0)=="[") {
                                 //console.log("line");
-                                
+                                this.motorWatchdogTime = Date.now();
                                 for (var i = 0; i<this.motorIdArr.length; i++) {
-                                    this.motorWatchdogTime = Date.now(); 
-                                    
                                     var motId = this.motorIdArr[i];
                                     var motor = this.motors[motId];
                                     
@@ -1560,35 +1558,15 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                                             break;
                                     }    
 
-                                }
+                                }//for each motor
                                 
-                                //clear data buffer
-                                this.data="";
-                                
-                                // if ('a' in tmp && 'o' in tmp) {
-                                //     console.log("a and o were in update a:", tmp.a, "o:", tmp.o);
-                                    
-                                //     // double check size and toss garbage
-                                //     if (tmp.o > 200 || tmp.a > 200) {
-                                //         // toss it
-                                //         console.log("got garbage data");
-                                //     } else {
-                                //         // good data
-                                //         this.statEl.a.text(tmp.a);
-                                //         this.statEl.o.text(tmp.o);
-                                //         var objTemp = parseFloat(tmp.o);
-                                //         if (objTemp > this.maxTemp) {
-                                //             // current obj temperature is higher than we've seen. record it.
-                                //             console.log("cur o tmp > prev max tmp");
-                                //             this.maxTemp = objTemp;
-                                //             this.onMaxTempUpdate();
-                                //             this.onTimeUpdate();
-                                //         }
-                                //     }
-                                // }
-                            }
+                            }//if line starts with '['
+                            
+                            //clear data buffer
+                            this.data="";
+                            
                             console.groupEnd();
-                        }
+                        } // has \r\n or \n
                     }
                 }
             }
@@ -2595,7 +2573,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                         </ul>
                     </div>
                 </div>
-            </div> <span class="panel-title" data-toggle="popover">G3P Axes <small>v0.0.9</small></span>
+            </div> <span class="panel-title" data-toggle="popover">G3P Axes <small>v0.0.9a</small></span>
 
         </div>
         <div id="com-chilipeppr-widget-xyz-body" class="panel-body">
