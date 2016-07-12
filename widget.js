@@ -1311,10 +1311,14 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
         },
         watchdogset: false,
         watchdogTick: function() {
-            if ((this.motorWatchdogTime - Date.now()) > 2750) { //2750 value is from the arduino setting of minimum update interval (2500), with some margin added for processing 
+            var elapsed = (Date.now() - this.motorWatchdogTime);
+            if (elapsed > 2750) { //2750 value is from the arduino setting of minimum update interval (2500), with some margin added for processing 
+                console.log("WATCHDOG TIMEOUT!");
                 for (motorId in this.motorIdArr) {
-                    motors[motorId].processStateInfo(motorStateEnum.unknown);
+                    this.motors[this.motorIdArr[motorId]].processStateInfo(motorStateEnum.unknown);
                 }
+            } else {
+                console.log("WATCHDOG TICK "+elapsed);
             }
         },
         motorWatchdogTime: 0,

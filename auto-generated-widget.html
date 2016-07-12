@@ -1573,10 +1573,14 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
         },
         watchdogset: false,
         watchdogTick: function() {
-            if ((this.motorWatchdogTime - Date.now()) > 2750) { //2750 value is from the arduino setting of minimum update interval (2500), with some margin added for processing 
+            var elapsed = (Date.now() - this.motorWatchdogTime);
+            if (elapsed > 2750) { //2750 value is from the arduino setting of minimum update interval (2500), with some margin added for processing 
+                console.log("WATCHDOG TIMEOUT!");
                 for (motorId in this.motorIdArr) {
-                    motors[motorId].processStateInfo(motorStateEnum.unknown);
+                    this.motors[this.motorIdArr[motorId]].processStateInfo(motorStateEnum.unknown);
                 }
+            } else {
+                console.log("WATCHDOG TICK "+elapsed);
             }
         },
         motorWatchdogTime: 0,
@@ -2573,7 +2577,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                         </ul>
                     </div>
                 </div>
-            </div> <span class="panel-title" data-toggle="popover">G3P Axes <small>v0.0.9c</small></span>
+            </div> <span class="panel-title" data-toggle="popover">G3P Axes <small>v0.1.0</small></span>
 
         </div>
         <div id="com-chilipeppr-widget-xyz-body" class="panel-body">
