@@ -1071,7 +1071,8 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
         saveOptionsCookie: function () {
             var options = {
                 showA: false,
-                moveBy: this.baseval
+                moveBy: this.baseval,
+                port: this.options.port
             };
             var optionsStr = JSON.stringify(options);
             console.log("saving options:", options, "json.stringify:", optionsStr);
@@ -1238,10 +1239,12 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                 ma: this.axisma
             };
         },
+        machineState: "",
         controllerStatus: function (data) {
           //alert(data);
-          console.log(data);
-          $('#com-chilipeppr-widget-xyz .machineStateReport').text(data);
+          //console.log(data);
+          this.machineState = data;
+          $('#com-chilipeppr-widget-xyz .machineStateReport').text(this.machineState);
         },
         motorIdArr: ['X','Xp','Y','Z','A','S'], //order must match that in the arduino code for reporting
         //TODO dynamically initialize motors, to assure keys are in motorIdArr
