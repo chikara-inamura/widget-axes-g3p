@@ -173,13 +173,15 @@ function ClearPathMotor(motId) {
     this.processStateInfo = function(newState) {
         
         if (this.state!==newState) {
-            //enabled should not 'downgrade' a 'homed' state
-            if (!(newState==motorStateEnum.enabled && (this.state==motorStateEnum.good || this.motorStateEnum==motorStateEnum.homing))) {
+            //enabled should not 'downgrade' either of the following states: 'homeing' / 'good' 
+            if (!(newState==motorStateEnum.enabled && (this.state==motorStateEnum.good || this.state==motorStateEnum.homing))) {
                 if (this.state==motorStateEnum.disabled && newState==motorStateEnum.enabled) {
-                    TalDebugMsg("Changing(2) motor staet from "+this.state+" to "+motorStateEnum.homing);
+                    //disabled->enabled puts the motor in seek home mode
+                    TalDebugMsg("Changing(2) motor state from "+this.state+" to "+motorStateEnum.homing);
                     this.state = motorStateEnum.homing;   
                 } else {
-                    TalDebugMsg("Changing(1) motor staet from "+this.state+" to "+newState);
+                    //all other state changes are straightforward
+                    TalDebugMsg("Changing(1) motor state from "+this.state+" to "+newState);
                     this.state = newState;
                 }
                 this.refreshDisplay();
