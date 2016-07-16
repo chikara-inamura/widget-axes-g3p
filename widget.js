@@ -1620,7 +1620,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                 motChar="Z";
                 homeDistance = 450;
                 this.motors['Z'].processStateInfo(motorStateEnum.homing);
-            }
+            } 
             // Homes all axes present in command. At least one axis letter must be present. The value (number) must be provided but is ignored.
             // The homing sequence is fixed and always starts with the Z axis (if requested). The sequence runs ZXYA (but skipping all axes that are not specified in the G28.2 command)
             console.log("homeAxis. evt.data:", evt.data, "evt:", evt);
@@ -1628,7 +1628,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             var slowMotionHome = "G91 G01 F750 "+motChar+"-"+homeDistance+"\nG28.3 "+motChar+"0\nG90\n";
             
             var initCmds = [
-                { cmd: '!%', pauseAfter: 250 },
+                { cmd: "!%", pauseAfter: 250 },
                 { cmd: '$'+motNum+"PM=0", pauseAfter: 1200 },
                 { cmd: '$'+motNum+"PM=1", pauseAfter: 1200 },
                 { cmd: slowMotionHome }
