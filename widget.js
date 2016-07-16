@@ -1627,12 +1627,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
 
             var slowMotionHome = "G91 G01 F750 "+motChar+"-"+homeDistance+"\nG28.3 "+motChar+"0\nG90\n";
             
-            var initCmds = [
-                { cmd: "!%", pauseAfter: 250 },
-                { cmd: '$'+motNum+"PM=0", pauseAfter: 1200 },
-                { cmd: '$'+motNum+"PM=1", pauseAfter: 1200 },
-                { cmd: slowMotionHome }
-            ];
+           
 
         }
         ,
