@@ -1276,7 +1276,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
               }
           } else {
               //state change to something other than 'Stop', disable homing... 
-              if (this.homingMotor.motorId!=="") {
+              if ("Run" !== data && this.homingMotor.motorId!=="") {
                   if (Date.now() - this.homingMotor.time < this.homingMotor.maxTime) {
                   switch (this.homingMotor.motorId) {
                       case "X":

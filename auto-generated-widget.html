@@ -1611,7 +1611,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
               }
           } else {
               //state change to something other than 'Stop', disable homing... 
-              if (this.homingMotor.motorId!=="") {
+              if ("Run" !== data && this.homingMotor.motorId!=="") {
                   if (Date.now() - this.homingMotor.time < this.homingMotor.maxTime) {
                   switch (this.homingMotor.motorId) {
                       case "X":
@@ -2730,7 +2730,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                         </ul>
                     </div>
                 </div>
-            </div> <span class="panel-title" data-toggle="popover">G3P Axes <small>v0.1.9</small></span>
+            </div> <span class="panel-title" data-toggle="popover">G3P Axes <small>v0.1.9a</small></span>
 
         </div>
         <div id="com-chilipeppr-widget-xyz-body" class="panel-body">
