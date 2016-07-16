@@ -170,7 +170,7 @@ function ClearPathMotor(motId) {
         
         if (this.state!==newState) {
             //enabled should not 'downgrade' a 'homed' state
-            if (this.state!=motorStateEnum.good || newState!=motorStateEnum.enabled) {
+            if (!(newState==motorStateEnum.enabled && (this.state==motorStateEnum.good || this.motorStateEnum==motorStateEnum.homing))) {
                     this.state = newState;
                     this.refreshDisplay();
             }
@@ -1634,6 +1634,25 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                 { cmd: slowMotionHome }
             ];
 
+            for (var cmdCtr = 0; cmdCtr < initCmds.length; cmdCtr++) {
+                var initCmd = initCmds[cmdCtr];
+                var rawCmd = "";
+                var rawPause = 0;
+                if (typeof initCmd === 'object' && 'cmd' in initCmd) {
+                    rawCmd = initCmd.cmd;
+                } else {
+                    rawCmd = initCmd;
+                }
+                rawCmd += "\n";
+                if (typeof initCmd === 'object' && 'pauseAfter' in initCmd) {
+                    rawPause = initCmd.pauseAfter;
+                }
+                chilipeppr.publish("/com-chilipeppr-widget-serialport/jsonSend", {
+                    D: rawCmd,
+                    Id: "tinygInit-cmd" + that.initIdCtr++,
+                    Pause: rawPause
+                });
+            }
         }
         ,
         isAAxisShowing: false,
