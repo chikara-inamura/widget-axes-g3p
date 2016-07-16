@@ -171,9 +171,14 @@ function ClearPathMotor(motId) {
         if (this.state!==newState) {
             //enabled should not 'downgrade' a 'homed' state
             if (!(newState==motorStateEnum.enabled && (this.state==motorStateEnum.good || this.motorStateEnum==motorStateEnum.homing))) {
+                if (this.state==motorStateEnum.disabled && newState==motorStateEnum.enabled) {
+                    this.staet = motorStateEnum.homing;   
+                } else {
                     this.state = newState;
+                }
                     this.refreshDisplay();
             }
+            
         }
         
     }
@@ -1608,18 +1613,18 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                 motNum=1;
                 motChar="X";
                 homeDistance = 350;
-                this.motors['X'].processStateInfo(motorStateEnum.homing);
-                this.motors['Xp'].processStateInfo(motorStateEnum.homing);
+                // this.motors['X'].processStateInfo(motorStateEnum.homing);
+                // this.motors['Xp'].processStateInfo(motorStateEnum.homing);
             } else if (evt.data == "y") {
                 motNum=2;
                 motChar="Y";
                 homeDistance = 350;
-                this.motors['Y'].processStateInfo(motorStateEnum.homing);
+                // this.motors['Y'].processStateInfo(motorStateEnum.homing);
             } else if (evt.data == "z") {
                 motNum=3;
                 motChar="Z";
                 homeDistance = 450;
-                this.motors['Z'].processStateInfo(motorStateEnum.homing);
+                // this.motors['Z'].processStateInfo(motorStateEnum.homing);
             } 
             // Homes all axes present in command. At least one axis letter must be present. The value (number) must be provided but is ignored.
             // The homing sequence is fixed and always starts with the Z axis (if requested). The sequence runs ZXYA (but skipping all axes that are not specified in the G28.2 command)
