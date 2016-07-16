@@ -168,31 +168,14 @@ function ClearPathMotor(motId) {
     
     this.processStateInfo = function(newState) {
         
-        var updatedState = false;
         if (this.state!==newState) {
-            switch (newState) {
-                case motorStateEnum.unknown:
-                case motorStateEnum.disabled:
-                case motorStateEnum.error:
-                case motorStateEnum.homed:
+            //enabled should not 'downgrade' a 'homed' state
+            if (this.state!=motorStateEnum.good || newState!=motorStateEnum.enabled) {
                     this.state = newState;
-                    updatedState = true; 
-                    break;
-                case motorStateEnum.enabled:
-                    //enabled should not 'downgrade' a 'homed' state
-                    if (motorStateEnum.homed!==this.state) {
-                        this.state = newState;
-                        updatedState = true;
-                    } 
-                    break;
-                default:
-                    console.error("UNEXPECTED MOTOR STATE");
+                    this.refreshDisplay();
             }
         }
         
-        if (updatedState) {
-            this.refreshDisplay();
-        } 
     }
     
     this.refreshDisplay = function() {
@@ -205,7 +188,8 @@ function ClearPathMotor(motId) {
 }
 
 var motorStateEnum = { 
-            homed: "clearpath_homed",
+            good: "clearpath_good",
+            homing: "clearpath_homing",
             enabled: "clearpath_enabled",
             disabled: "clearpath_disabled",
             error: "clearpath_error",
@@ -1615,40 +1599,41 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
 
         },
         homeAxis: function (evt) {
+            //TODO: HANDLE 'A' and 'S' in here as well (different approach)...
+            
+            var homeDistance = 999;
             var motNum=0;
             var motChar='-';
             if (evt.data == "x") {
                 motNum=1;
                 motChar="X";
+                homeDistance = 350;
+                this.motors['X'].processStateInfo(motorStateEnum.homing);
+                this.motors['Xp'].processStateInfo(motorStateEnum.homing);
             } else if (evt.data == "y") {
                 motNum=2;
                 motChar="Y";
+                homeDistance = 350;
+                this.motors['Y'].processStateInfo(motorStateEnum.homing);
             } else if (evt.data == "z") {
                 motNum=3;
                 motChar="Z";
+                homeDistance = 450;
+                this.motors['Z'].processStateInfo(motorStateEnum.homing);
             }
             // Homes all axes present in command. At least one axis letter must be present. The value (number) must be provided but is ignored.
             // The homing sequence is fixed and always starts with the Z axis (if requested). The sequence runs ZXYA (but skipping all axes that are not specified in the G28.2 command)
             console.log("homeAxis. evt.data:", evt.data, "evt:", evt);
-            
-            var cmd = "$"+motNum+"PM=0\n"
-            console.log(cmd);
-            //chilipeppr.publish("/com-chilipeppr-widget-serialport/send", cmd);
-            this.publishSend(cmd);
 
-            var otherthis = this;
-            setTimeout(function() { 
-                var cmd="$"+motNum+"PM=1\n";
-                otherthis.publishSend(cmd);
-                    
-                    setTimeout(function() {
-                         var cmd="G91 G01 F750 "+motChar+"-310\nG28.3 "+motChar+"0\nG90\n";
-                        console.log(cmd);
-                        otherthis.publishSend(cmd);
-                    }, 1200);
-                
-                }
-                , 1200);
+            var slowMotionHome = "G91 G01 F750 "+motChar+"-"+homeDistance+"\nG28.3 "+motChar+"0\nG90\n";
+            
+            var initCmds = [
+                { cmd: '!%', pauseAfter: 250 },
+                { cmd: '$'+motNum+"PM=0", pauseAfter: 1200 },
+                { cmd: '$'+motNum+"PM=1", pauseAfter: 1200 },
+                { cmd: slowMotionHome }
+            ];
+
         }
         ,
         isAAxisShowing: false,

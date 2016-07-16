@@ -220,9 +220,74 @@
     z-index:10;
 }
 
+@-webkit-keyframes blinkButtonRed {
+    0% {
+           background-color: rgba(255,0,0,1)
+    }
+    80% {
+           background-color: rgba(255,0,0,0.30)
+    }
+    100% {
+           background-color: rgba(255,0,0,1)
+    }
+}
 
-#com-chilipeppr-widget-xyz .clearpath_homed {
-    background-color: #008000;
+@-webkit-keyframes blinkButtonHoming {
+    0% {
+           background-color: rgba(102,255,102,1)
+    }
+    50% {
+           background-color: rgba(255,255,153,1)
+    }
+    100% {
+           background-color: rgba(102,255,102,1)
+    }
+}
+
+
+@-webkit-keyframes blinkButtonDisabled {
+    0% {
+       color: rgba(255,255,255,0);
+    }
+    10% {
+        color: rgba(255,255,255,1);
+    }
+    30% {
+        color: rgba(255,255,255,1);
+    }
+    40% {
+        color: rgba(255,255,255,0);
+    }
+    100% {
+        color: rgba(255,255,255,0);
+    }
+}
+
+@-webkit-keyframes blinkButtonDisabledQuestion {
+    0% {
+       color: rgba(255,255,255,1);
+    }
+    10% {
+        color: rgba(255,255,255,0);
+    }
+    30% {
+        color: rgba(255,255,255,0);
+    }
+    40% {
+        color: rgba(255,255,255,1);
+    }
+    100% {
+        color: rgba(255,255,255,1);
+    }
+}
+
+#com-chilipeppr-widget-xyz .clearpath_good {
+    background-color: #66FF66;
+}
+
+#com-chilipeppr-widget-xyz .clearpath_homing {
+  /*  background-color: #99CCFF;*/
+    -webkit-animation:blinkButtonHoming normal 1s infinite ease-in-out; /* Webkit */
 }
 
 #com-chilipeppr-widget-xyz .clearpath_enabled {
@@ -234,9 +299,17 @@
 }
 
 #com-chilipeppr-widget-xyz .clearpath_error {
-    background-color: #FF0000;
+    -webkit-animation:blinkButtonRed normal 1s infinite ease-in-out; /* Webkit */
 }
 
 #com-chilipeppr-widget-xyz .clearpath_unknown {
-    background-color: #9900CC;
+ /*   background-color: #CC00FF;*/
+      background-color: #888888;
+      -webkit-animation:blinkButtonDisabled normal 4s infinite ease-in-out; /* Webkit */
+}
+
+#com-chilipeppr-widget-xyz .clearpath_unknown:after {
+      -webkit-animation:blinkButtonDisabledQuestion normal 4s infinite ease-in-out; /* Webkit */
+  content: "?";
+  margin-left: -0.9em;
 }
