@@ -1238,11 +1238,37 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                 ma: this.axisma
             };
         },
+        homingMotor: { 
+            time: 0, 
+            motorId: "",
+            maxTime: 60000
+        },
         machineState: "",
         controllerStatus: function (data) {
           //alert(data);
           //console.log(data);
           this.machineState = data;
+          if ("Stop"==data) {
+              if (Date.now() - this.homingMotor.time < this.homingMotor.maxTime) {
+                  switch (this.homingMotor.motorId) {
+                      case "X":
+                        motors["X"].processStateInfo(motorStateEnum.good);
+                        motors["Xp"].processStateInfo(motorStateEnum.good);
+                        break;
+                      case "Y":
+                        motors["Y"].processStateInfo(motorStateEnum.good);
+                        break;
+                      case "Z":
+                        motors["Z"].processStateInfo(motorStateEnum.good);
+                        break;
+                      default:
+                        break;
+                  }
+                  this.homingMotor.motorId = "";
+              } else {
+                  //TODO: debug as error!
+              }
+          }
           $('#com-chilipeppr-widget-xyz .machineStateReport').text(this.machineState);
         },
         motorIdArr: ['X','Xp','Y','Z','A','S'], //order must match that in the arduino code for reporting
@@ -1636,6 +1662,9 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                 homeDistance = 450;
                 // this.motors['Z'].processStateInfo(motorStateEnum.homing);
             } 
+            
+            this.homingMotor.motorId = motChar;
+            this.homingMotor.time = Date.now();
             // Homes all axes present in command. At least one axis letter must be present. The value (number) must be provided but is ignored.
             // The homing sequence is fixed and always starts with the Z axis (if requested). The sequence runs ZXYA (but skipping all axes that are not specified in the G28.2 command)
             console.log("homeAxis. evt.data:", evt.data, "evt:", evt);
