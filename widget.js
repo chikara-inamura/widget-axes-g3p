@@ -1649,7 +1649,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                 }
                 chilipeppr.publish("/com-chilipeppr-widget-serialport/jsonSend", {
                     D: rawCmd,
-                    Id: "tinygInit-cmd" + that.initIdCtr++,
+                    Id: "tinygInit-cmd" + this.initIdCtr++,
                     Pause: rawPause
                 });
             }
