@@ -172,11 +172,15 @@ function ClearPathMotor(motId) {
             //enabled should not 'downgrade' a 'homed' state
             if (!(newState==motorStateEnum.enabled && (this.state==motorStateEnum.good || this.motorStateEnum==motorStateEnum.homing))) {
                 if (this.state==motorStateEnum.disabled && newState==motorStateEnum.enabled) {
+                    console.log("Changing(2) motor staet from "+this.state+" to "+motorStateEnum.homing);
                     this.state = motorStateEnum.homing;   
                 } else {
+                    console.log("Changing(1) motor staet from "+this.state+" to "+newState);
                     this.state = newState;
                 }
-                    this.refreshDisplay();
+                this.refreshDisplay();
+            } else {
+                console.log("ignoring motor change request. [from: "+this.state+" to: "+newState+"]");
             }
             
         }

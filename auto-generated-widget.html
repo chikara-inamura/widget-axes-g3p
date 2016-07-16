@@ -507,11 +507,15 @@ function ClearPathMotor(motId) {
             //enabled should not 'downgrade' a 'homed' state
             if (!(newState==motorStateEnum.enabled && (this.state==motorStateEnum.good || this.motorStateEnum==motorStateEnum.homing))) {
                 if (this.state==motorStateEnum.disabled && newState==motorStateEnum.enabled) {
+                    console.log("Changing(2) motor staet from "+this.state+" to "+motorStateEnum.homing);
                     this.state = motorStateEnum.homing;   
                 } else {
+                    console.log("Changing(1) motor staet from "+this.state+" to "+newState);
                     this.state = newState;
                 }
-                    this.refreshDisplay();
+                this.refreshDisplay();
+            } else {
+                console.log("ignoring motor change request. [from: "+this.state+" to: "+newState+"]");
             }
             
         }
@@ -2664,7 +2668,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                         </ul>
                     </div>
                 </div>
-            </div> <span class="panel-title" data-toggle="popover">G3P Axes <small>v0.1.6f</small></span>
+            </div> <span class="panel-title" data-toggle="popover">G3P Axes <small>v0.1.7</small></span>
 
         </div>
         <div id="com-chilipeppr-widget-xyz-body" class="panel-body">
