@@ -507,7 +507,7 @@ function ClearPathMotor(motId) {
             //enabled should not 'downgrade' a 'homed' state
             if (!(newState==motorStateEnum.enabled && (this.state==motorStateEnum.good || this.motorStateEnum==motorStateEnum.homing))) {
                 if (this.state==motorStateEnum.disabled && newState==motorStateEnum.enabled) {
-                    this.staet = motorStateEnum.homing;   
+                    this.state = motorStateEnum.homing;   
                 } else {
                     this.state = newState;
                 }
