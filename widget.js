@@ -200,6 +200,12 @@ function ClearPathMotor(motId) {
         }
     }
     
+    this.cancelIfHoming = function() {
+        if (this.state==motorStateEnum.homing) {
+            this.state=motorStateEnum.unknown;
+        }
+    }
+    
 }
 
 var motorStateEnum = { 
@@ -1252,14 +1258,14 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
               if (Date.now() - this.homingMotor.time < this.homingMotor.maxTime) {
                   switch (this.homingMotor.motorId) {
                       case "X":
-                        motors["X"].processStateInfo(motorStateEnum.good);
-                        motors["Xp"].processStateInfo(motorStateEnum.good);
+                        this.motors["X"].processStateInfo(motorStateEnum.good);
+                        this.motors["Xp"].processStateInfo(motorStateEnum.good);
                         break;
                       case "Y":
-                        motors["Y"].processStateInfo(motorStateEnum.good);
+                        this.motors["Y"].processStateInfo(motorStateEnum.good);
                         break;
                       case "Z":
-                        motors["Z"].processStateInfo(motorStateEnum.good);
+                        this.motors["Z"].processStateInfo(motorStateEnum.good);
                         break;
                       default:
                         break;
@@ -1267,6 +1273,27 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                   this.homingMotor.motorId = "";
               } else {
                   //TODO: debug as error!
+              }
+          } else {
+              //state change to something other than 'Stop', disable homing... 
+              if (this.homingMotor.motorId!=="") {
+                  if (Date.now() - this.homingMotor.time < this.homingMotor.maxTime) {
+                  switch (this.homingMotor.motorId) {
+                      case "X":
+                        this.motors["X"].cancelIfHoming();
+                        this.motors["Xp"].cancelIfHoming()
+                        break;
+                      case "Y":
+                        this.motors["Y"].cancelIfHoming()
+                        break;
+                      case "Z":
+                        this.motors["Z"].cancelIfHoming()
+                        break;
+                      default:
+                        break;
+                  }
+                  this.homingMotor.motorId = "";
+                 }
               }
           }
           $('#com-chilipeppr-widget-xyz .machineStateReport').text(this.machineState);
