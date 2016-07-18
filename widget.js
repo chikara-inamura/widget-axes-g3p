@@ -177,17 +177,20 @@ function ClearPathMotor(motId) {
         if (this.state!==newState) {
             //enabled should not 'downgrade' either of the following states: 'homeing' / 'good' 
             if (!(newState==motorStateEnum.enabled && (this.state==motorStateEnum.good || this.state==motorStateEnum.homing))) {
+                msgText = "";
                 if (motorStateEnum.good==newState && motorStateEnum.homing!=this.state) {
                     //'good' only valid if was homing
                     newState = motorStateEnum.unknown;
+                    msgText = "good requested when not in homing state!"
                 }
-                
+                else
                 if (this.homeOnNextEnable && motorStateEnum.enabled==newState && motorStateEnum.disabled==this.state) {
                     newState = motorStateEnum.homing;
-                    homeOnNextEnable = false;
+                    this.homeOnNextEnable = false;
+                    msgText = "Set to homing due to homeOnNextEnable being true"
                 }
                 
-                TalDebugMsg("Changing(1) motor state from "+this.state+" to "+newState);
+                TalDebugMsg("Changing(1) motor state from "+this.state+" to "+newState+" "+msgText);
                 this.state = newState;
                 this.refreshDisplay();
             } else {
