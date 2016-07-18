@@ -177,6 +177,7 @@ function ClearPathMotor(motId) {
         if (this.state!==newState) {
             if (newState==motorStateEnum.disabled) {
                 //FEEDHOLD!
+                TalDebugMsg("FEEDHOLD!");
                 $('#com-chilipeppr-widget-tinyg .tinyg-feedhold').click();
             }
 
