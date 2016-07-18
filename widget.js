@@ -170,11 +170,23 @@ function ClearPathMotor(motId) {
     this.motId = motId;
     this.state = motorStateEnum.unknown;
     
+    this.homeOnNextEnable = false;
+    
     this.processStateInfo = function(newState) {
         
         if (this.state!==newState) {
             //enabled should not 'downgrade' either of the following states: 'homeing' / 'good' 
             if (!(newState==motorStateEnum.enabled && (this.state==motorStateEnum.good || this.state==motorStateEnum.homing))) {
+                if (motorStateEnum.good==newState && motorStateEnum.homing!=this.state) {
+                    //'good' only valid if was homing
+                    newState = motorStateEnum.unknown;
+                }
+                
+                if (this.homeOnNextEnable && motorStateEnum.enabled==newState && motorStateEnum.disabled==this.state) {
+                    newState = motorStateEnum.homing;
+                    homeOnNextEnable = false;
+                }
+                
                 TalDebugMsg("Changing(1) motor state from "+this.state+" to "+newState);
                 this.state = newState;
                 this.refreshDisplay();
@@ -1675,18 +1687,18 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                 motNum=1;
                 motChar="X";
                 homeDistance = 350;
-                this.motors['X'].processStateInfo(motorStateEnum.homing);
-                this.motors['Xp'].processStateInfo(motorStateEnum.homing);
+                this.motors['X'].homeOnNextEnable = true;
+                this.motors['Xp'].homeOnNextEnable = true;
             } else if (evt.data == "y") {
                 motNum=2;
                 motChar="Y";
                 homeDistance = 350;
-                this.motors['Y'].processStateInfo(motorStateEnum.homing);
+                this.motors['Y'].homeOnNextEnable = true;
             } else if (evt.data == "z") {
                 motNum=3;
                 motChar="Z";
                 homeDistance = 450;
-                this.motors['Z'].processStateInfo(motorStateEnum.homing);
+                this.motors['Z'].homeOnNextEnable = true;
             } 
             
             this.homingMotor.motorId = motChar;
