@@ -171,14 +171,16 @@ function ClearPathMotor(motId) {
     this.state = motorStateEnum.unknown;
     
     this.homeOnNextEnable = false;
-    
+
     this.processStateInfo = function(newState) {
         
         if (this.state!==newState) {
-            if (newState==motorStateEnum.disabled) {
-                //FEEDHOLD!
-                TalDebugMsg("FEEDHOLD!");
-                $('#com-chilipeppr-widget-tinyg .tinyg-feedhold').click();
+            if (newState==motorStateEnum.error) {
+                if (false==this.homeOnNextEnable) {
+                    //FEEDHOLD!
+                    TalDebugMsg("FEEDHOLD!");
+                    $('#com-chilipeppr-widget-tinyg .tinyg-feedhold').click();
+                } 
             }
 
             //enabled should not 'downgrade' either of the following states: 'homeing' / 'good' 

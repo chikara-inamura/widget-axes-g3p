@@ -506,14 +506,16 @@ function ClearPathMotor(motId) {
     this.state = motorStateEnum.unknown;
     
     this.homeOnNextEnable = false;
-    
+
     this.processStateInfo = function(newState) {
         
         if (this.state!==newState) {
-            if (newState==motorStateEnum.disabled) {
-                //FEEDHOLD!
-                TalDebugMsg("FEEDHOLD!");
-                $('#com-chilipeppr-widget-tinyg .tinyg-feedhold').click();
+            if (newState==motorStateEnum.error) {
+                if (false==this.homeOnNextEnable) {
+                    //FEEDHOLD!
+                    TalDebugMsg("FEEDHOLD!");
+                    $('#com-chilipeppr-widget-tinyg .tinyg-feedhold').click();
+                } 
             }
 
             //enabled should not 'downgrade' either of the following states: 'homeing' / 'good' 
@@ -2750,7 +2752,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                         </ul>
                     </div>
                 </div>
-            </div> <span class="panel-title" data-toggle="popover">G3P Axes <small>v0.2.0a</small></span>
+            </div> <span class="panel-title" data-toggle="popover">G3P Axes <small>v0.2.0b</small></span>
 
         </div>
         <div id="com-chilipeppr-widget-xyz-body" class="panel-body">
