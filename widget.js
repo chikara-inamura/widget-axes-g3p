@@ -175,6 +175,11 @@ function ClearPathMotor(motId) {
     this.processStateInfo = function(newState) {
         
         if (this.state!==newState) {
+            if (newState==motorStateEnum.disabled) {
+                //FEEDHOLD!
+                $('#com-chilipeppr-widget-tinyg .tinyg-feedhold').click();
+            }
+
             //enabled should not 'downgrade' either of the following states: 'homeing' / 'good' 
             if (!(newState==motorStateEnum.enabled && (this.state==motorStateEnum.good || this.state==motorStateEnum.homing))) {
                 msgText = "";
