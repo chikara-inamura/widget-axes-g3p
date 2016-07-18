@@ -175,15 +175,8 @@ function ClearPathMotor(motId) {
         if (this.state!==newState) {
             //enabled should not 'downgrade' either of the following states: 'homeing' / 'good' 
             if (!(newState==motorStateEnum.enabled && (this.state==motorStateEnum.good || this.state==motorStateEnum.homing))) {
-                if (this.state==motorStateEnum.disabled && newState==motorStateEnum.enabled) {
-                    //disabled->enabled puts the motor in seek home mode
-                    TalDebugMsg("Changing(2) motor state from "+this.state+" to "+motorStateEnum.homing);
-                    this.state = motorStateEnum.homing;   
-                } else {
-                    //all other state changes are straightforward
-                    TalDebugMsg("Changing(1) motor state from "+this.state+" to "+newState);
-                    this.state = newState;
-                }
+                TalDebugMsg("Changing(1) motor state from "+this.state+" to "+newState);
+                this.state = newState;
                 this.refreshDisplay();
             } else {
                 TalDebugMsg("ignoring motor change request. [from: "+this.state+" to: "+newState+"]");
@@ -1247,7 +1240,13 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
         homingMotor: { 
             time: 0, 
             motorId: "",
-            maxTime: 60000
+            maxTime: 90000
+            
+            //todo: prevent 'homing' state if there was not intent to home... (or really, handle a way where it will know if it moved or not...)
+            
+            //todo: feedhold on error
+            
+            //todo: 'homing' and 'error' in number space
         },
         machineState: "",
         controllerStatus: function (data) {
@@ -1676,18 +1675,18 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                 motNum=1;
                 motChar="X";
                 homeDistance = 350;
-                // this.motors['X'].processStateInfo(motorStateEnum.homing);
-                // this.motors['Xp'].processStateInfo(motorStateEnum.homing);
+                this.motors['X'].processStateInfo(motorStateEnum.homing);
+                this.motors['Xp'].processStateInfo(motorStateEnum.homing);
             } else if (evt.data == "y") {
                 motNum=2;
                 motChar="Y";
                 homeDistance = 350;
-                // this.motors['Y'].processStateInfo(motorStateEnum.homing);
+                this.motors['Y'].processStateInfo(motorStateEnum.homing);
             } else if (evt.data == "z") {
                 motNum=3;
                 motChar="Z";
                 homeDistance = 450;
-                // this.motors['Z'].processStateInfo(motorStateEnum.homing);
+                this.motors['Z'].processStateInfo(motorStateEnum.homing);
             } 
             
             this.homingMotor.motorId = motChar;
