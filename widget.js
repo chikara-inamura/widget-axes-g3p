@@ -1718,13 +1718,23 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             // The homing sequence is fixed and always starts with the Z axis (if requested). The sequence runs ZXYA (but skipping all axes that are not specified in the G28.2 command)
             console.log("homeAxis. evt.data:", evt.data, "evt:", evt);
 
-            var slowMotionHome = "G91 G01 F750 "+motChar+"-"+homeDistance+"\nG28.3 "+motChar+"0\nG90\n";
+            var halfSlowMotionHome = "G91 G01 F750 "+motChar+"-"+(homeDistance/2)+"\n";
+            var setAxisToAvoidSoftAlarm = "G28.3 "+motChar+""+(homeDistance/2)+"\n";
+
+            var setAxisZero = "G28.3 "+motChar+"0\nG90\n";
             
             var initCmds = [
                 { cmd: "!%", pauseAfter: 250 }, 
                 { cmd: "$"+motNum+"PM=0", pauseAfter: 1200 },
                 { cmd: "$"+motNum+"PM=1", pauseAfter: 1200 },
-                { cmd: slowMotionHome }
+    
+                //we move half of the homeDistance, four times, each time setting the axis to be kept within soft limits. (since homeDistance is just a bit longer (~110%, and certainly not >200%) than the axis size, half of it should be certainly within limits)
+                { cmd: setAxisToAvoidSoftAlarm },
+                { cmd: halfSlowMotionHome },
+                { cmd: setAxisToAvoidSoftAlarm },
+                { cmd: halfSlowMotionHome },
+
+                { cmd: setAxisZero },
             ];
 
             for (var cmdCtr = 0; cmdCtr < initCmds.length; cmdCtr++) {
