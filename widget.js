@@ -163,7 +163,19 @@ cprequire_test(["inline:com-chilipeppr-widget-xyz"], function (xyz) {
 } /*end_test*/ );
 
 function TalDebugMsg(msg) {
-    $('#com-chilipeppr-widget-xyz .debugLine').text(msg);
+    if (undefined == this.lineCount) {
+        this.lineCount = 0;
+    }
+    this.lineCount++;
+    
+    var textArea = $('#com-chilipeppr-widget-xyz .debugLines')[0];
+    textArea.value+=msg+"\n";
+    
+    if (this.lineCount>50) {
+        var newText = textArea.value.replace(/^.*\n/g,"");
+        textArea.value=newText;
+        this.lineCount--;
+    }
 }
 
 function ClearPathMotor(motId) {
@@ -1688,6 +1700,9 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             this.publishSend(cmd);
 
         },
+        getHomingSpeed: function() {
+          return $("#com-chilipeppr-widget-xyz #homingSpeedSelector")[0].value; 
+        },
         homeAxis: function (evt) {
             //TODO: HANDLE 'A' and 'S' in here as well (different approach)...
             
@@ -1718,7 +1733,8 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             // The homing sequence is fixed and always starts with the Z axis (if requested). The sequence runs ZXYA (but skipping all axes that are not specified in the G28.2 command)
             console.log("homeAxis. evt.data:", evt.data, "evt:", evt);
 
-            var halfSlowMotionHome = "G91 G01 F750 "+motChar+"-"+(homeDistance/2)+"\n";
+            var homingSpeed = this.getHomingSpeed();
+            var halfSlowMotionHome = "G91 G01 F"+homingSpeed+" "+motChar+"-"+(homeDistance/2)+"\n";
             var setAxisToAvoidSoftAlarm = "G28.3 "+motChar+""+(homeDistance/2)+"\n";
 
             var setAxisZero = "G28.3 "+motChar+"0\nG90\n";

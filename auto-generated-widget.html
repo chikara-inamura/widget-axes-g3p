@@ -498,7 +498,19 @@ cprequire_test(["inline:com-chilipeppr-widget-xyz"], function (xyz) {
 } /*end_test*/ );
 
 function TalDebugMsg(msg) {
-    $('#com-chilipeppr-widget-xyz .debugLine').text(msg);
+    if (undefined == this.lineCount) {
+        this.lineCount = 0;
+    }
+    this.lineCount++;
+    
+    var textArea = $('#com-chilipeppr-widget-xyz .debugLines')[0];
+    textArea.value+=msg+"\n";
+    
+    if (this.lineCount>50) {
+        var newText = textArea.value.replace(/^.*\n/g,"");
+        textArea.value=newText;
+        this.lineCount--;
+    }
 }
 
 function ClearPathMotor(motId) {
@@ -2023,6 +2035,9 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             this.publishSend(cmd);
 
         },
+        getHomingSpeed: function() {
+          return $("#com-chilipeppr-widget-xyz #homingSpeedSelector")[0].value; 
+        },
         homeAxis: function (evt) {
             //TODO: HANDLE 'A' and 'S' in here as well (different approach)...
             
@@ -2053,7 +2068,8 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             // The homing sequence is fixed and always starts with the Z axis (if requested). The sequence runs ZXYA (but skipping all axes that are not specified in the G28.2 command)
             console.log("homeAxis. evt.data:", evt.data, "evt:", evt);
 
-            var halfSlowMotionHome = "G91 G01 F750 "+motChar+"-"+(homeDistance/2)+"\n";
+            var homingSpeed = this.getHomingSpeed();
+            var halfSlowMotionHome = "G91 G01 F"+homingSpeed+" "+motChar+"-"+(homeDistance/2)+"\n";
             var setAxisToAvoidSoftAlarm = "G28.3 "+motChar+""+(homeDistance/2)+"\n";
 
             var setAxisZero = "G28.3 "+motChar+"0\nG90\n";
@@ -2762,7 +2778,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                         </ul>
                     </div>
                 </div>
-            </div> <span class="panel-title" data-toggle="popover">G3P Axes <small>v0.2.5</small></span>
+            </div> <span class="panel-title" data-toggle="popover">G3P Axes <small>v0.2.8</small></span>
 
         </div>
         <div id="com-chilipeppr-widget-xyz-body" class="panel-body">
@@ -3302,6 +3318,19 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             
              <div class="row">
                 <div class="col col-xs-4">
+                    Homing Speed:
+                </div>
+                <div class="col col-xs-8">
+                    <select id="homingSpeedSelector">
+                      <option value="750">Slow (750)</option>
+                      <option value="1500" selected>Medium (1500)</option>
+                      <option value="3000">Fast (3000)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col col-xs-4">
                     Machine State:
                 </div>
                 <div class="col col-xs-8">
@@ -3309,6 +3338,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                     
                 </div>
             </div>
+
 
             <div class="row">
                 <div class="col col-xs-4">
@@ -3325,7 +3355,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                     Debug:
                 </div>
                 <div class="col col-xs-8">
-                    <div class="debugLine">----</div>
+                    <textarea class="debugLines"></textarea>
                     
                 </div>
             </div>

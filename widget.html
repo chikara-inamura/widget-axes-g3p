@@ -111,7 +111,7 @@
                         </ul>
                     </div>
                 </div>
-            </div> <span class="panel-title" data-toggle="popover">G3P Axes <small>v0.2.5</small></span>
+            </div> <span class="panel-title" data-toggle="popover">G3P Axes <small>v0.2.8</small></span>
 
         </div>
         <div id="com-chilipeppr-widget-xyz-body" class="panel-body">
@@ -651,6 +651,19 @@
             
              <div class="row">
                 <div class="col col-xs-4">
+                    Homing Speed:
+                </div>
+                <div class="col col-xs-8">
+                    <select id="homingSpeedSelector">
+                      <option value="750">Slow (750)</option>
+                      <option value="1500" selected>Medium (1500)</option>
+                      <option value="3000">Fast (3000)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col col-xs-4">
                     Machine State:
                 </div>
                 <div class="col col-xs-8">
@@ -658,6 +671,7 @@
                     
                 </div>
             </div>
+
 
             <div class="row">
                 <div class="col col-xs-4">
@@ -674,7 +688,7 @@
                     Debug:
                 </div>
                 <div class="col col-xs-8">
-                    <div class="debugLine">----</div>
+                    <textarea class="debugLines"></textarea>
                     
                 </div>
             </div>
