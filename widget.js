@@ -190,8 +190,8 @@ function ClearPathMotor(motId) {
             if (newState==motorStateEnum.error) {
                 if (false==this.homeOnNextEnable) {
                     //FEEDHOLD!
-                    TalDebugMsg("FEEDHOLD!");
-                    $('#com-chilipeppr-widget-tinyg .tinyg-feedhold').click();
+                    TalDebugMsg("["+motId+"] Would have FEEDHOLD! (but disabled)");
+                    //$('#com-chilipeppr-widget-tinyg .tinyg-feedhold').click();
                 } 
             }
 
@@ -210,11 +210,11 @@ function ClearPathMotor(motId) {
                     msgText = "Set to homing due to homeOnNextEnable being true"
                 }
                 
-                TalDebugMsg("Changing(1) motor state from "+this.state+" to "+newState+" "+msgText);
+                TalDebugMsg("["+motId+"] Changing(1) motor state from "+this.state+" to "+newState+" "+msgText);
                 this.state = newState;
                 this.refreshDisplay();
             } else {
-                TalDebugMsg("ignoring motor change request. [from: "+this.state+" to: "+newState+"]");
+                TalDebugMsg("["+motId+"] ignoring motor change request. [from: "+this.state+" to: "+newState+"]");
             }
             
         }
