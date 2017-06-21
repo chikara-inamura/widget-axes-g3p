@@ -1415,12 +1415,14 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             var elapsed = (Date.now() - this.motorWatchdogTime);
             if (elapsed > 2750) { //2750 value is from the arduino setting of minimum update interval (2500), with some margin added for processing 
                 console.log("WATCHDOG TIMEOUT!");
+                
+                this.soundTheAlarm("Motor update timeout");
+                
                 for (motorId in this.motorIdArr) {
                     this.motors[this.motorIdArr[motorId]].processStateInfo(motorStateEnum.unknown);
                 }
             } else {
                 console.log("WATCHDOG TICK "+elapsed);
-                this.soundTheAlarm("Motor update timeout");
             }
         },
         motorWatchdogTime: 0,
