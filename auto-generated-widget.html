@@ -2156,6 +2156,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
         soundTheAlarm: function(msg) {
             if (this.isAlarmEnabled) {
                 $("#alarmSoundCtrl").get(0).play();
+                $("#lastAlarmCause").text(msg);
                 console.log("Sounding Alarm: '"+msg+"'");
             }
         },
@@ -2842,7 +2843,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                         </ul>
                     </div>
                 </div>
-            </div> <span class="panel-title" data-toggle="popover">G3P Axes <small>v0.3c</small></span>
+            </div> <span class="panel-title" data-toggle="popover">G3P Axes <small>v0.3.1</small></span>
 
         </div>
         <div id="com-chilipeppr-widget-xyz-body" class="panel-body">
@@ -3376,8 +3377,9 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                 <button type="button" class="btn btn-default resetclearpathS clearpath_unknown" data-delay="500" data-animation="true" data-placement="auto" data-container="body" data-trigger="hover" data-title="Reset S Motor" data-content="">
                    S
                 </button>
-
-                
+            </div>
+            <div>
+                Last Alarm Cause: <span id="lastAlarmCause">none</span>
             </div>
             <br/>
              <div class="row">

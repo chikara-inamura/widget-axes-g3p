@@ -1821,6 +1821,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
         soundTheAlarm: function(msg) {
             if (this.isAlarmEnabled) {
                 $("#alarmSoundCtrl").get(0).play();
+                $("#lastAlarmCause").text(msg);
                 console.log("Sounding Alarm: '"+msg+"'");
             }
         },
