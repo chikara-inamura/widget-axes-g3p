@@ -1219,28 +1219,28 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                 intgray: $('#com-chilipeppr-widget-xyz-x .xyz-intgray'),
                 negpos: $('#com-chilipeppr-widget-xyz-x .xyz-negpos'),
                 decimal: $('#com-chilipeppr-widget-xyz-x .xyz-decimal'),
-                lastUpdate: 0
+                lastUpdate: Date.now()
             };
             this.axisy = {
                 intblack: $('#com-chilipeppr-widget-xyz-y .xyz-intblack'),
                 intgray: $('#com-chilipeppr-widget-xyz-y .xyz-intgray'),
                 negpos: $('#com-chilipeppr-widget-xyz-y .xyz-negpos'),
                 decimal: $('#com-chilipeppr-widget-xyz-y .xyz-decimal'),
-                lastUpdate: 0
+                lastUpdate: Date.now()
             };
             this.axisz = {
                 intblack: $('#com-chilipeppr-widget-xyz-z .xyz-intblack'),
                 intgray: $('#com-chilipeppr-widget-xyz-z .xyz-intgray'),
                 negpos: $('#com-chilipeppr-widget-xyz-z .xyz-negpos'),
                 decimal: $('#com-chilipeppr-widget-xyz-z .xyz-decimal'),
-                lastUpdate: 0
+                lastUpdate: Date.now()
             };
             this.axisa = {
                 intblack: $('#com-chilipeppr-widget-xyz-a .xyz-intblack'),
                 intgray: $('#com-chilipeppr-widget-xyz-a .xyz-intgray'),
                 negpos: $('#com-chilipeppr-widget-xyz-a .xyz-negpos'),
                 decimal: $('#com-chilipeppr-widget-xyz-a .xyz-decimal'),
-                lastUpdate: 0
+                lastUpdate: Date.now()
             };
             this.axismx = {
                 intblack: $('#com-chilipeppr-widget-xyz-mx .xyz-intblack'),
@@ -1410,7 +1410,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             if ((tNow - this.axes['x'].lastUpdate  >  $("#xalarmtime").val()*1000 )
              || (tNow - this.axes['y'].lastUpdate  >  $("#yalarmtime").val()*1000 )
              || (tNow - this.axes['z'].lastUpdate  >  $("#zalarmtime").val()*1000 )) {
-                this.soundTheAlarm("Axis move timeout");
+                this.soundTheAlarm("Axis move timeout: "+this.axes['x'].lastUpdate);
             }
             var elapsed = (Date.now() - this.motorWatchdogTime);
             if (elapsed > 2750) { //2750 value is from the arduino setting of minimum update interval (2500), with some margin added for processing 
