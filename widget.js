@@ -1837,7 +1837,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                 $('#com-chilipeppr-widget-xyz .alarmOnOff').removeClass("active");
                 $('#alarmOnOffIcon').addClass("glyphicon-volume-off");
                 $('#alarmOnOffIcon').removeClass("glyphicon-volume-up");
-                resetTheAlarm();
+                this.resetTheAlarm();
             }
         },
         ismDROShowing: false,
