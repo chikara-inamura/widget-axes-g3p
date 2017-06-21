@@ -192,6 +192,7 @@ function ClearPathMotor(motId) {
                     //FEEDHOLD!
                     TalDebugMsg("["+motId+"] Would have FEEDHOLD! (but disabled)");
                     //$('#com-chilipeppr-widget-tinyg .tinyg-feedhold').click();
+                    this.soundTheAlarm("Motor is in error mode");
                 } 
             }
 
@@ -1409,7 +1410,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             if ((tNow - this.axes['x'].lastUpdate  >  $("#xalarmtime").val()*1000 )
              || (tNow - this.axes['y'].lastUpdate  >  $("#yalarmtime").val()*1000 )
              || (tNow - this.axes['z'].lastUpdate  >  $("#zalarmtime").val()*1000 )) {
-                this.soundTheAlarm();
+                this.soundTheAlarm("Axis move timeout");
             }
             var elapsed = (Date.now() - this.motorWatchdogTime);
             if (elapsed > 2750) { //2750 value is from the arduino setting of minimum update interval (2500), with some margin added for processing 
@@ -1419,6 +1420,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                 }
             } else {
                 console.log("WATCHDOG TICK "+elapsed);
+                this.soundTheAlarm("Motor update timeout");
             }
         },
         motorWatchdogTime: 0,
@@ -1816,9 +1818,10 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             $(window).trigger('resize');
         },
         isAlarmEnabled: false,
-        soundTheAlarm: function() {
+        soundTheAlarm: function(msg) {
             if (this.isAlarmEnabled) {
                 $("#alarmSoundCtrl").get(0).play();
+                console.log("Sounding Alarm: '"+msg+"'");
             }
         },
         resetTheAlarm: function() {
