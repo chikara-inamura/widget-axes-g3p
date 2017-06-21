@@ -178,7 +178,7 @@ function TalDebugMsg(msg) {
     }
 }
 
-function ClearPathMotor(motId) {
+function ClearPathMotor(motId,that) {
     this.motId = motId;
     this.state = motorStateEnum.unknown;
     
@@ -192,7 +192,7 @@ function ClearPathMotor(motId) {
                     //FEEDHOLD!
                     TalDebugMsg("["+motId+"] Would have FEEDHOLD! (but disabled)");
                     //$('#com-chilipeppr-widget-tinyg .tinyg-feedhold').click();
-                    this.soundTheAlarm("Motor is in error mode");
+                    that.soundTheAlarm("Motor is in error mode");
                 } 
             }
 
@@ -1339,12 +1339,12 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
         },
         motorIdArr: ['X','Xp','Y','Z','A','S'], //order must match that in the arduino code for reporting
         //TODO dynamically initialize motors, to assure keys are in motorIdArr
-        motors: { 'X' : new ClearPathMotor('X'),
-                  'Xp' : new ClearPathMotor('Xp'),
-                  'Y' : new ClearPathMotor('Y'),
-                  'Z' : new ClearPathMotor('Z'),
-                  'A' : new ClearPathMotor('A'),
-                  'S' : new ClearPathMotor('S')
+        motors: { 'X' : new ClearPathMotor('X',this),
+                  'Xp' : new ClearPathMotor('Xp',this),
+                  'Y' : new ClearPathMotor('Y',this),
+                  'Z' : new ClearPathMotor('Z',this),
+                  'A' : new ClearPathMotor('A',this),
+                  'S' : new ClearPathMotor('S',this)
         },
         onWsRecvMotMonitor: function(data) {
             //debugger;
