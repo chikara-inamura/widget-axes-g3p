@@ -1217,25 +1217,29 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                 intblack: $('#com-chilipeppr-widget-xyz-x .xyz-intblack'),
                 intgray: $('#com-chilipeppr-widget-xyz-x .xyz-intgray'),
                 negpos: $('#com-chilipeppr-widget-xyz-x .xyz-negpos'),
-                decimal: $('#com-chilipeppr-widget-xyz-x .xyz-decimal')
+                decimal: $('#com-chilipeppr-widget-xyz-x .xyz-decimal'),
+                lastUpdate: 0
             };
             this.axisy = {
                 intblack: $('#com-chilipeppr-widget-xyz-y .xyz-intblack'),
                 intgray: $('#com-chilipeppr-widget-xyz-y .xyz-intgray'),
                 negpos: $('#com-chilipeppr-widget-xyz-y .xyz-negpos'),
-                decimal: $('#com-chilipeppr-widget-xyz-y .xyz-decimal')
+                decimal: $('#com-chilipeppr-widget-xyz-y .xyz-decimal'),
+                lastUpdate: 0
             };
             this.axisz = {
                 intblack: $('#com-chilipeppr-widget-xyz-z .xyz-intblack'),
                 intgray: $('#com-chilipeppr-widget-xyz-z .xyz-intgray'),
                 negpos: $('#com-chilipeppr-widget-xyz-z .xyz-negpos'),
-                decimal: $('#com-chilipeppr-widget-xyz-z .xyz-decimal')
+                decimal: $('#com-chilipeppr-widget-xyz-z .xyz-decimal'),
+                lastUpdate: 0
             };
             this.axisa = {
                 intblack: $('#com-chilipeppr-widget-xyz-a .xyz-intblack'),
                 intgray: $('#com-chilipeppr-widget-xyz-a .xyz-intgray'),
                 negpos: $('#com-chilipeppr-widget-xyz-a .xyz-negpos'),
-                decimal: $('#com-chilipeppr-widget-xyz-a .xyz-decimal')
+                decimal: $('#com-chilipeppr-widget-xyz-a .xyz-decimal'),
+                lastUpdate: 0
             };
             this.axismx = {
                 intblack: $('#com-chilipeppr-widget-xyz-mx .xyz-intblack'),
@@ -1353,6 +1357,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                         // append data until we have a newline
                         this.data += d.D;
                         if (this.data.match(/\r{0,1}\n/)) {
+                            
                             //console.group("G3P - onWsRecvMotorMonitor");
                             // we found our data, but may have had more than we need on one line
                             // so remove it from buffer
@@ -1400,6 +1405,12 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
         },
         watchdogset: false,
         watchdogTick: function() {
+            tNow = Date.now();
+            if ((tNow - this.axes['x'].lastUpdate  >  $("#xalarmtime").val()*1000 )
+             || (tNow - this.axes['y'].lastUpdate  >  $("#yalarmtime").val()*1000 )
+             || (tNow - this.axes['z'].lastUpdate  >  $("#zalarmtime").val()*1000 )) {
+                this.soundTheAlarm();
+            }
             var elapsed = (Date.now() - this.motorWatchdogTime);
             if (elapsed > 2750) { //2750 value is from the arduino setting of minimum update interval (2500), with some margin added for processing 
                 console.log("WATCHDOG TIMEOUT!");
@@ -1419,13 +1430,18 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             }
         },
         setupPortList: function() {
+            console.group("G3P - onPortListClick");
+            console.log("1");
             chilipeppr.subscribe("/com-chilipeppr-widget-serialport/list", this, this.getPortListCallback);
+            console.log("2");
             chilipeppr.publish("/com-chilipeppr-widget-serialport/getlist");
-
+            console.log("3");
             chilipeppr.subscribe("/com-chilipeppr-widget-serialport/onportopen", this, this.getPortListCallback);            
-            
+            console.log("4");
             // create onclick event
             $('.com-chilipeppr-widget-xyz-motorport').change(this.onPortListClick.bind(this));
+            console.log("5");
+            console.groupEnd();
         },
         onPortListClick: function(evt) {
             console.group("G3P - onPortListClick");
@@ -1434,7 +1450,13 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             console.log("port:", port);
             this.options.port = port;
             this.saveOptionsCookie();
+            console.log("saved cookie");
             console.groupEnd();
+        },
+        onPortListRefreshClick: function(evt) {
+            console.group("G3P - onPortListRefreshClick");
+            this.onPortListClick(evt);
+            console.groupEnd();  
         },
         getPortListCallback: function(data) {
             console.group("G3P - getPortListCallback");
@@ -1454,6 +1476,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                     }
                 });
             }
+            console.log("Done adding ports");
             console.groupEnd();
         },
 
@@ -1513,6 +1536,9 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
                 //console.log("new val:", val, "is same as last val:", axl, "axis:", axis, "exiting");
                 return;
             }
+            
+            ax.lastUpdate = Date.now();
+            
             if (ax.intblack !== null) { //Temporary, until we actually have html for machine axis
                 // set the negative indicator, but only do it if there was a change
                 // to reduce dom updates for efficiency
@@ -1554,6 +1580,7 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
         menuSetup: function () {
             $('#com-chilipeppr-widget-xyz .xyz-showa').click(this.showHideAxisA.bind(this));
             $('#com-chilipeppr-widget-xyz .showhideaaxis').click(this.showHideAxisA.bind(this));
+            $('#com-chilipeppr-widget-xyz .alarmOnOff').click(this.alarmOnOff.bind(this));
             $('#com-chilipeppr-widget-xyz .showhidemDRO').click(this.showHidemDRO.bind(this));
 
             // Setup zeroing G92 - per axis menu
@@ -1788,6 +1815,31 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             }
             $(window).trigger('resize');
         },
+        isAlarmEnabled: false,
+        soundTheAlarm: function() {
+            if (this.isAlarmEnabled) {
+                $("#alarmSoundCtrl").get(0).play();
+            }
+        },
+        resetTheAlarm: function() {
+            $("#alarmSoundCtrl").get(0).pause();
+        },
+        alarmOnOff: function () {
+            //toggle the alarm
+            this.isAlarmEnabled=!this.isAlarmEnabled;
+            if (this.isAlarmEnabled) {
+                $('#com-chilipeppr-widget-xyz .panel-heading').css("background-color","green");
+                $('#com-chilipeppr-widget-xyz .alarmOnOff').addClass("active");
+                $('#alarmOnOffIcon').addClass("glyphicon-volume-up");
+                $('#alarmOnOffIcon').removeClass("glyphicon-volume-off");
+            } else {
+                $('#com-chilipeppr-widget-xyz .panel-heading').css("background-color","");
+                $('#com-chilipeppr-widget-xyz .alarmOnOff').removeClass("active");
+                $('#alarmOnOffIcon').addClass("glyphicon-volume-off");
+                $('#alarmOnOffIcon').removeClass("glyphicon-volume-up");
+                resetTheAlarm();
+            }
+        },
         ismDROShowing: false,
         showHidemDRO: function () {
             var el = $('#com-chilipeppr-widget-xyz-mx');
@@ -1824,6 +1876,9 @@ cpdefine("inline:com-chilipeppr-widget-xyz", ["chilipeppr_ready", "jquerycookie"
             $('#com-chilipeppr-widget-xyz .showhideaaxis').popover();
             $('#com-chilipeppr-widget-xyz .btnInMm').popover();
             $('#com-chilipeppr-widget-xyz .btnmachineDRO').popover();
+            
+            $('#com-chilipeppr-widget-xyz .debugPortList').click(this.onPortListRefreshClick.bind(this));
+            
         },
         jogFocusIndicate: function () {
             $('#com-chilipeppr-widget-xyz').addClass("panel-primary");
